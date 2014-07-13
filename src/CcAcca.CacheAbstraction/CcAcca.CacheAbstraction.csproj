@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DD710CA1-0A1D-4E11-A7CB-CC2DA55355D9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CcAcca.CacheAbstraction</RootNamespace>
+    <AssemblyName>CcAcca.CacheAbstraction</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\Debug\CcAcca.CacheAbstraction\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\Release\CcAcca.CacheAbstraction\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\bin\Release\CcAcca.CacheAbstraction\CcAcca.CacheAbstraction.XML</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CacheAdministator.cs" />
+    <Compile Include="CacheBase.cs" />
+    <Compile Include="CacheCreationOptions.cs" />
+    <Compile Include="CacheDecorator.cs" />
+    <Compile Include="CacheDecoratorChainBuilder.cs" />
+    <Compile Include="CacheDecoratorOptions.cs" />
+    <Compile Include="CacheExtensions.cs" />
+    <Compile Include="CacheIdentity.cs" />
+    <Compile Include="CacheInfo.cs" />
+    <Compile Include="GlobalCacheProvider.cs" />
+    <Compile Include="ICache.cs" />
+    <Compile Include="ICacheProvider.cs" />
+    <Compile Include="IMultiThreadProtectedCache.cs" />
+    <Compile Include="INullCache.cs" />
+    <Compile Include="IPausableCache.cs" />
+    <Compile Include="MultiThreadProtectedDecorator.cs" />
+    <Compile Include="NullCache.cs" />
+    <Compile Include="ObjectCacheWrapper.cs" />
+    <Compile Include="PausableDecorator.cs" />
+    <Compile Include="SimpleInmemoryCache.cs" />
+    <Compile Include="Statistics\CacheItemAccessInfo.cs" />
+    <Compile Include="Statistics\CacheStatistic.cs" />
+    <Compile Include="Statistics\CacheStatistics.cs" />
+    <Compile Include="Statistics\ICacheActivityRecorder.cs" />
+    <Compile Include="Statistics\IStatisticsCache.cs" />
+    <Compile Include="Statistics\ItemAccessCacheStatistic.cs" />
+    <Compile Include="Statistics\StatisticsDecorator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CachingOverview.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Readme-caching.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

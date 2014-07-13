@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="Core abstractions">
+    <Position X="4" Y="1.25" Height="0.263" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Simple implementations">
+    <Position X="1.469" Y="3.104" Height="0.263" Width="1.94" />
+  </Comment>
+  <Comment CommentText="Cache decorators">
+    <Position X="6.781" Y="3.543" Height="0.263" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Cache management">
+    <Position X="4.25" Y="6.5" Height="0.263" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Caching overview&#xD;&#xA;&#xD;&#xA;For more details see the Readme.txt in this folder">
+    <Position X="0.729" Y="0.5" Height="0.542" Width="2.794" />
+  </Comment>
+  <Comment CommentText="Cache creation">
+    <Position X="0.5" Y="6.5" Height="0.263" Width="1.7" />
+  </Comment>
+  <Class Name="CcAcca.CacheAbstraction.NullCache" Collapsed="true" HideInheritanceLine="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAgAAAAAABAQAAAAAAAAAQAAAAAAYAAA=</HashCode>
+      <FileName>NullCache.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Orientation="Left" Position="0.298" Collapsed="true" />
+  </Class>
+  <Class Name="CcAcca.CacheAbstraction.CacheDecorator" Collapsed="true">
+    <Position X="5.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAEQAAAgAACAAABAUAAAAAQAAAAAAAAAAYAAA=</HashCode>
+      <FileName>CacheDecorator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CcAcca.CacheAbstraction.CacheAdministator" Collapsed="true">
+    <Position X="4.5" Y="7" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAQQAGAIAAAIAAAAAAAEAAJBAAAEAAACCAAQEQA=</HashCode>
+      <FileName>CacheAdministator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CcAcca.CacheAbstraction.Statistics.StatisticsDecorator" Collapsed="true">
+    <Position X="4.5" Y="5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAgAEAAAABBAAAAAAAAAAAAAAAAAYAAA=</HashCode>
+      <FileName>Statistics\StatisticsDecorator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CcAcca.CacheAbstraction.PausableDecorator" Collapsed="true">
+    <Position X="6.5" Y="5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAgAAAAAABAAAAAAAAAAAAAAgAAAQAAA=</HashCode>
+      <FileName>PausableDecorator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CcAcca.CacheAbstraction.ObjectCacheWrapper" Collapsed="true" HideInheritanceLine="true">
+    <Position X="3" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AABARQAYEAAEAgAAAAAABARAAAAAAAAAAAACAAAYAAA=</HashCode>
+      <FileName>ObjectCacheWrapper.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="1.169" />
+  </Class>
+  <Class Name="CcAcca.CacheAbstraction.SimpleInmemoryCache" Collapsed="true" HideInheritanceLine="true">
+    <Position X="0.5" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAEAAAAgAAAAAABARAAAAAAAAAAAAAAAAYAAA=</HashCode>
+      <FileName>SimpleInmemoryCache.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CcAcca.CacheAbstraction.MultiThreadProtectedDecorator" Collapsed="true">
+    <Position X="8.5" Y="5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAgAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MultiThreadProtectedDecorator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CcAcca.CacheAbstraction.CacheExtensions" Collapsed="true">
+    <Position X="0.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAABAAIIAAAAIAAAAgAAACAAQIQAAAA=</HashCode>
+      <FileName>CacheExtensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CcAcca.CacheAbstraction.CacheDecoratorChainBuilder" Collapsed="true">
+    <Position X="0.5" Y="8" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAEAAACAAAAA=</HashCode>
+      <FileName>CacheDecoratorChainBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CcAcca.CacheAbstraction.GlobalCacheProvider" Collapsed="true">
+    <Position X="0.5" Y="7.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>ACAABIAAAAAAAABAAAAAAAAAAAAAAEBARAAgAAAgARA=</HashCode>
+      <FileName>GlobalCacheProvider.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CcAcca.CacheAbstraction.CacheBase" Collapsed="true">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAEAAAAQSAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CacheBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="CcAcca.CacheAbstraction.ICache" Collapsed="true">
+    <Position X="3.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAEAAAAgAAAAAABAUAAAAAQAAAAAAAAAAYAAA=</HashCode>
+      <FileName>ICache.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>
