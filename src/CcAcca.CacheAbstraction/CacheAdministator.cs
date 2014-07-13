@@ -16,13 +16,13 @@ namespace CcAcca.CacheAbstraction
     {
         #region Member Variables
 
-        private readonly ConcurrentDictionary<ICache, object> _allCaches = new ConcurrentDictionary<ICache, object>();
+        private readonly ConcurrentDictionary<ICache, bool> _allCaches = new ConcurrentDictionary<ICache, bool>();
         private readonly Func<CacheStatistics> _cacheStatisticsFactory;
 
         #endregion
 
 
-        public CacheAdministator() : this(() => CacheStatistics.Empty) {}
+        public CacheAdministator() : this(() => CacheStatistics.All) {}
 
         public CacheAdministator(Func<CacheStatistics> cacheStatisticsFactory)
         {
@@ -91,11 +91,12 @@ namespace CcAcca.CacheAbstraction
         private ICache DecorateWithStatistics(ICache cache)
         {
             var builder = new CacheDecoratorChainBuilder();
-            cache = builder.AddDecorators(cache, new CacheDecoratorOptions
-                {
-                    IsStatisticsOn = true,
-                    Statistics = _cacheStatisticsFactory()
-                });
+            cache = builder.AddDecorators(cache,
+                                          new CacheDecoratorOptions
+                                              {
+                                                  IsStatisticsOn = true,
+                                                  Statistics = _cacheStatisticsFactory()
+                                              });
             return cache;
         }
 
@@ -165,6 +166,15 @@ namespace CcAcca.CacheAbstraction
         }
 
 
+        /// <summary>
+        /// Register the <paramref name="cache"/>
+        /// </summary>
+        /// <exception cref="ArgumentException">
+        /// <returns>The <paramref name="cache"/> extended with <see cref="IStatisticsCache"/> behaviour</returns>
+        /// Where a cache with the same <see cref="ICache.Id"/> has already been registered</exception>
+        /// <remarks>
+        /// Any cache registered will be extended with the <see cref="IStatisticsCache"/> behaviour if not already
+        /// </remarks>
         public virtual ICache Register(ICache cache)
         {
             if (cache == null) throw new ArgumentNullException("cache");
@@ -177,19 +187,37 @@ namespace CcAcca.CacheAbstraction
                 throw new ArgumentException(string.Format("A cache has already been registered with the Id '{0}'",
                                                           cache.Id));
             }
+            bool hasExistingStatisticsDecorator = cache.IsDecoratedWith<IStatisticsCache>();
             cache = DecorateWithStatistics(cache);
-            _allCaches[cache] = IgnoredValue;
+            _allCaches[cache] = !hasExistingStatisticsDecorator;
             return cache;
         }
 
 
-        public virtual void Unregister(ICache cache)
+        /// <summary>
+        /// Unregisters the <paramref name="cache"/> from this administator
+        /// </summary>
+        /// <returns>
+        /// The <paramref name="cache"/> minus <see cref="IStatisticsCache"/> behaviour previously added by this administrator
+        /// </returns>
+        /// <remarks>
+        /// Any <see cref="IStatisticsCache"/> behaviour added to the <paramref name="cache"/> when it was registered
+        /// with this administrator will be removed
+        /// </remarks>
+        public virtual ICache Unregister(ICache cache)
         {
-            object ignored;
-            _allCaches.TryRemove(cache, out ignored);
+            bool removeStatistics;
+            bool found = _allCaches.TryRemove(cache, out removeStatistics);
+            if (found && removeStatistics)
+            {
+                var chainBuilder = new CacheDecoratorChainBuilder();
+                return chainBuilder.RemoveDecorators(cache, new CacheDecoratorOptions {IsStatisticsOn = false});
+            }
+            else
+            {
+                return cache;
+            }
         }
-
-        private static readonly object IgnoredValue = new object();
 
         /// <summary>
         /// Deletes the item from the cache identified by it's <see cref="ICache.Id" />

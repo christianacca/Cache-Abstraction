@@ -23,18 +23,18 @@ namespace CcAcca.CacheAbstraction
             // IMultiThreadProtectedCache must be before IPausableCache otherwise pausing cache will have no effect
             // IStatisticsCache must be after IPausableCache otherwise stats will be recorded even if the cache is paused
 
-            if (options.IsStatisticsOn && !decorated.IsDecoratedWith<IStatisticsCache>())
+            if (options.IsStatisticsOn == true && !decorated.IsDecoratedWith<IStatisticsCache>())
             {
                 decorated = InsertDecoratorAtStartOfChain(decorated,
                                                           cache => new StatisticsDecorator(options.Statistics, cache));
             }
-            if (options.IsPausableOn && !decorated.IsDecoratedWith<IPausableCache>())
+            if (options.IsPausableOn == true && !decorated.IsDecoratedWith<IPausableCache>())
             {
                 decorated = InsertDecoratorBetween<IMultiThreadProtectedCache, IStatisticsCache>(
                     decorated,
                     cache => new PausableDecorator(cache));
             }
-            if (options.IsMultiThreadProtectionOn && !decorated.IsDecoratedWith<IMultiThreadProtectedCache>())
+            if (options.IsMultiThreadProtectionOn == true && !decorated.IsDecoratedWith<IMultiThreadProtectedCache>())
             {
                 decorated = new MultiThreadProtectedDecorator(decorated);
             }
@@ -109,6 +109,32 @@ namespace CcAcca.CacheAbstraction
                 // create a chain with our new decorator
                 return createDecoration(decorated);
             }
+        }
+
+        public virtual ICache RemoveDecorators<T>(ICache decorated, T options) where T : CacheDecoratorOptions
+        {
+            var exlusions = new List<Type>();
+            if (options.IsMultiThreadProtectionOn == false)
+            {
+                exlusions.Add(typeof(IMultiThreadProtectedCache));
+            }
+            if (options.IsPausableOn == false)
+            {
+                exlusions.Add(typeof(IPausableCache));
+            }
+            if (options.IsStatisticsOn == false)
+            {
+                exlusions.Add(typeof(IStatisticsCache));
+            }
+
+            var cacheImpl = decorated.GetDecoratorChainAndDecorated().Last();
+            var requiredChain = decorated.GetDecoratorChain(exclude: exlusions).Reverse().OfType<CacheDecorator>().ToList();
+
+            ICache result = requiredChain.Aggregate(cacheImpl, (acc, decorator) => {
+                decorator.DecoratedCache = acc;
+                return decorator;
+            });
+            return result;
         }
     }
 }

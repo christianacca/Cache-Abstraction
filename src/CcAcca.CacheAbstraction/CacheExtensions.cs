@@ -41,7 +41,16 @@ namespace CcAcca.CacheAbstraction
         /// </summary>
         public static IEnumerable<ICache> GetDecoratorChain(this ICache cache)
         {
-            return GetCacheChainIterator(cache, false);
+            return GetDecoratorChain(cache, null);
+        }
+
+        /// <summary>
+        /// Returns an enumerable that iterates the decorators that are applied to <paramref name="cache"/>
+        /// </summary>
+        public static IEnumerable<ICache> GetDecoratorChain(this ICache cache, IEnumerable<Type> exclude)
+        {
+            exclude = exclude ?? Enumerable.Empty<Type>();
+            return GetCacheChainIterator(cache, false).Where(c => !exclude.Any(type => type.IsInstanceOfType(c)));
         }
 
 
@@ -78,7 +87,17 @@ namespace CcAcca.CacheAbstraction
         /// </summary>
         public static IEnumerable<ICache> GetDecoratorChainAndDecorated(this ICache cache)
         {
-            return GetCacheChainIterator(cache, true);
+            return GetDecoratorChainAndDecorated(cache, null);
+        }
+
+        /// <summary>
+        /// Returns an enumerable that iterates the decorators that are applied to <paramref name="cache"/> along with
+        /// the <paramref name="cache"/> itself
+        /// </summary>
+        public static IEnumerable<ICache> GetDecoratorChainAndDecorated(this ICache cache, IEnumerable<Type> exclude)
+        {
+            exclude = exclude ?? Enumerable.Empty<Type>();
+            return GetCacheChainIterator(cache, true).Where(c => !exclude.Any(type => type.IsInstanceOfType(c)));
         }
 
         /// <summary>
@@ -202,7 +221,7 @@ namespace CcAcca.CacheAbstraction
         /// and extended as an <see cref="ICache"/> instance
         /// </summary>
         /// <remarks>
-        /// Use the <paramref name="options"/> to define such things as the <see cref="ICache.InstanceName"/> and
+        /// Use the <paramref name="options"/> to define such things as the <see cref="ICache.Id"/> and
         /// the extended behaviours that the cache instance should receive
         /// </remarks>
         public static ICache WrapCache(this ConcurrentDictionary<string, object> store,
@@ -225,7 +244,7 @@ namespace CcAcca.CacheAbstraction
         /// </summary>
         /// <remarks>
         /// <para>
-        /// Use the <paramref name="options"/> to define such things as the <see cref="ICache.InstanceName"/> and
+        /// Use the <paramref name="options"/> to define such things as the <see cref="ICache.Id"/> and
         /// the extended behaviours that the cache instance should receive
         /// </para>
         /// <para>

@@ -164,5 +164,44 @@ namespace CcAcca.CacheAbstraction.Test
             Assert.That(chain.ElementAt(0), Is.InstanceOf<IMultiThreadProtectedCache>());
             Assert.That(chain.ElementAt(1), Is.InstanceOf<IPausableCache>());
         }
+
+        [Test]
+        public void RemoveDecorators_ShouldReturnCacheMinusDecorators()
+        {
+            // given
+            ICache cache = _builder.AddDecorators(_cacheImpl,
+                                                  new CacheDecoratorOptions
+                                                      {
+                                                          IsMultiThreadProtectionOn = true,
+                                                          IsStatisticsOn = true,
+                                                          IsPausableOn = true
+                                                      });
+
+            // when
+            cache = _builder.RemoveDecorators(cache,
+                                              new CacheDecoratorOptions {IsStatisticsOn = false, IsPausableOn = false});
+
+            // then
+            IEnumerable<ICache> chain = cache.GetDecoratorChain().ToList();
+
+            Assert.That(chain.Count(), Is.EqualTo(1), "Decorators");
+            Assert.That(chain.ElementAt(0), Is.InstanceOf<IMultiThreadProtectedCache>(), "MutliThreadPotected");
+        }
+
+        [Test]
+        public void RemoveDecorators_ShouldSafelyIgnoreMissingDecorators()
+        {
+            // given
+            ICache cache = _builder.AddDecorators(_cacheImpl, new CacheDecoratorOptions { IsMultiThreadProtectionOn = true });
+
+            // when
+            cache = _builder.RemoveDecorators(cache, new CacheDecoratorOptions { IsStatisticsOn = false });
+
+            // then
+            IEnumerable<ICache> chain = cache.GetDecoratorChain().ToList();
+
+            Assert.That(chain.Count(), Is.EqualTo(1), "Decorators");
+            Assert.That(chain.ElementAt(0), Is.InstanceOf<IMultiThreadProtectedCache>(), "MutliThreadPotected");
+        }
     }
 }

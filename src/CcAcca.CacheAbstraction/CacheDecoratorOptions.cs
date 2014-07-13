@@ -16,17 +16,17 @@ namespace CcAcca.CacheAbstraction
         /// <summary>
         /// Extend the cache with <see cref="IMultiThreadProtectedCache"/> behaviour?
         /// </summary>
-        public virtual bool IsMultiThreadProtectionOn { get; set; }
+        public virtual bool? IsMultiThreadProtectionOn { get; set; }
 
         /// <summary>
         /// Extend the cache with <see cref="IPausableCache"/> behaviour?
         /// </summary>
-        public virtual bool IsPausableOn { get; set; }
+        public virtual bool? IsPausableOn { get; set; }
 
         /// <summary>
         /// Extend the cache with <see cref="IStatisticsCache"/> behaviour?
         /// </summary>
-        public virtual bool IsStatisticsOn { get; set; }
+        public virtual bool? IsStatisticsOn { get; set; }
 
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace CcAcca.CacheAbstraction
         /// </remarks>
         public virtual CacheStatistics Statistics
         {
-            get { return _statistics ?? (IsStatisticsOn ? CacheStatistics.All : CacheStatistics.Empty); }
+            get { return _statistics ?? ((IsStatisticsOn ?? false) ? CacheStatistics.All : CacheStatistics.Empty); }
             set { _statistics = value; }
         }
 
