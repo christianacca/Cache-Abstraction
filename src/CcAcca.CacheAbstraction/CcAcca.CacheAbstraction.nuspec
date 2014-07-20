@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://raw.githubusercontent.com/christianacca/Cache-Abstraction/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/christianacca/Cache-Abstraction</projectUrl>
+    <iconUrl>http://www.gravatar.com/avatar/c1fc9a95deec0da0a3dc0fac34bddfec.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2014</copyright>
+
+    <tags>Cache Caching</tags>
+
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Runtime.Caching" targetFramework="net40" />
+    </frameworkAssemblies>
+
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>
