@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("CcAcca.CacheAbstration")]
 [assembly: AssemblyDescription("Simple yet extensible cache abstraction for the .net framework")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("CcAcca")]
+[assembly: AssemblyCompany("Christian Crowhurst")]
 [assembly: AssemblyProduct("CcAcca.CacheAbstration")]
 [assembly: AssemblyCopyright("Copyright (c) 2014 Christian Crowhurst")]
 [assembly: AssemblyTrademark("")]
