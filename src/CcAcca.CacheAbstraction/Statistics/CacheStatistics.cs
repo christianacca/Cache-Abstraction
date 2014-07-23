@@ -124,6 +124,10 @@ namespace CcAcca.CacheAbstraction.Statistics
 
         }
 
+        /// <summary>
+        /// Registers a <see cref="CacheStatistic"/> that will record <see cref="ICache"/> activity
+        /// </summary>
+        /// <param name="statistics"></param>
         public static void RegisterStatisticFactory(params Func<CacheStatistic>[] statistics)
         {
             foreach (var statistic in statistics)
@@ -136,6 +140,11 @@ namespace CcAcca.CacheAbstraction.Statistics
         public static CacheStatistics Empty { get; private set; }
         
         
+        /// <summary>
+        /// Returns a <see cref="CacheStatistics"/> instance that will record <see cref="ICache"/> actvity using
+        /// every <see cref="CacheStatistic"/> that has been registered
+        /// </summary>
+        /// <seealso cref="RegisterStatisticFactory"/>
         public static CacheStatistics All
         {
             get

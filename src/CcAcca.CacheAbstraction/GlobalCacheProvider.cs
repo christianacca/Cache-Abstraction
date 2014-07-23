@@ -113,6 +113,9 @@ namespace CcAcca.CacheAbstraction
                 cacheId => new MemoryCache(cacheId.Name).WrapCache(CacheCreationOptions.DefaultsWith(cacheId)));
         }
 
+        /// <summary>
+        /// Removes all cache constructors that have been registered using <see cref="RegisterDefaultConstructor{T}"/>
+        /// </summary>
         public static void ClearDefaultConstructors()
         {
             DefaultConstructors.Clear();
