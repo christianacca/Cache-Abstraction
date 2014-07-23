@@ -22,6 +22,14 @@ namespace CcAcca.CacheAbstraction
         #endregion
 
 
+        /// <summary>
+        /// Creates an instance of a <see cref="CacheAdministator"/> with default configuration applied
+        /// </summary>
+        /// <remarks>
+        /// The instance returned, when asked to <see cref="Register"/> a cache will extend the supplied cache with
+        /// a <see cref="IStatisticsCache"/> behaviour that will use <see cref="CacheStatistics.All"/> statics
+        /// to record cache activity
+        /// </remarks>
         public CacheAdministator() : this(() => CacheStatistics.All) {}
 
         public CacheAdministator(Func<CacheStatistics> cacheStatisticsFactory)
@@ -242,5 +250,17 @@ namespace CcAcca.CacheAbstraction
             cache.Remove(key);
             return true;
         }
+
+
+        static CacheAdministator()
+        {
+            DefaultInstance = new CacheAdministator();
+        }
+
+        /// <summary>
+        /// A default, globally available, instance of a <see cref="CacheAdministator"/> for use within an
+        /// application
+        /// </summary>
+        public static CacheAdministator DefaultInstance { get; set; }
     }
 }
