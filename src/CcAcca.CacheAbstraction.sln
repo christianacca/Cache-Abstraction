@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CcAcca.CacheAbstraction", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CcAcca.CacheAbstraction.Test", "CcAcca.CacheAbstraction.Test\CcAcca.CacheAbstraction.Test.csproj", "{BB71AEC0-5454-480A-92D4-CCFBFF319364}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CcAcca.CacheAbstraction.WebApi", "CcAcca.CacheAbstraction.WebApi\CcAcca.CacheAbstraction.WebApi.csproj", "{B9593361-E7FA-48A8-A45E-E5CB45E71649}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -30,6 +32,12 @@ Global
 		{BB71AEC0-5454-480A-92D4-CCFBFF319364}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
 		{BB71AEC0-5454-480A-92D4-CCFBFF319364}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB71AEC0-5454-480A-92D4-CCFBFF319364}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9593361-E7FA-48A8-A45E-E5CB45E71649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9593361-E7FA-48A8-A45E-E5CB45E71649}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9593361-E7FA-48A8-A45E-E5CB45E71649}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9593361-E7FA-48A8-A45E-E5CB45E71649}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{B9593361-E7FA-48A8-A45E-E5CB45E71649}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9593361-E7FA-48A8-A45E-E5CB45E71649}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

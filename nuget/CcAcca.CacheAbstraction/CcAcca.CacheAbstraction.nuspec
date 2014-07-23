@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>CcAcca.CacheAbstraction</id>
-    <version>1.0.0</version>
+    <version>1.2.0</version>
     <authors>Christian Crowhurst</authors>
     <owners>Christian Crowhurst</owners>
     <licenseUrl>https://raw.githubusercontent.com/christianacca/Cache-Abstraction/master/LICENSE</licenseUrl>
