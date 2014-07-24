@@ -22,4 +22,7 @@
 		</group>
 	 </dependencies>
   </metadata>
+<files> 
+  <file src="..\..\nuget\CcAcca.CacheAbstraction.WebApi\Content\App_Start\*.pp" target="Content\App_Start" />
+</files>
 </package>
