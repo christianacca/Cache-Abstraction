@@ -11,18 +11,11 @@ namespace CcAcca.CacheAbstraction
     /// </summary>
     public abstract class CacheBase
     {
-        private readonly object _locker = new object();
-
         protected CacheBase(CacheIdentity id)
         {
             if (id == null) throw new ArgumentNullException("id");
 
             Id = id;
-        }
-
-        public virtual object LockKey
-        {
-            get { return _locker; }
         }
 
         public CacheIdentity Id { get; private set; }

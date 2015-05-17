@@ -56,6 +56,7 @@ namespace CcAcca.CacheAbstraction
 
         public bool Contains(string key)
         {
+            // ReSharper disable once InconsistentlySynchronizedField
             return _inmemoryCache.ContainsKey(key);
         }
 
@@ -75,11 +76,18 @@ namespace CcAcca.CacheAbstraction
         }
 
 
-        public T GetData<T>(string key)
+        public virtual CacheItem<T> GetCacheItem<T>(string key)
         {
             object item;
+            // ReSharper disable once InconsistentlySynchronizedField
             bool found = _inmemoryCache.TryGetValue(key, out item);
-            return (T) (found ? item : default(T));
+            return found ? new CacheItem<T>((T) item) : null;
+        }
+
+
+        public object LockKey
+        {
+            get { return _inmemoryCache; }
         }
 
         public void Remove(string key)

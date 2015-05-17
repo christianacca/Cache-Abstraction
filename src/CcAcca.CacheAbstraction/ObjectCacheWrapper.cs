@@ -111,12 +111,22 @@ namespace CcAcca.CacheAbstraction
         }
 
 
-        public T GetData<T>(string key)
+        public virtual CacheItem<T> GetCacheItem<T>(string key)
         {
             object existingValue = Impl.Get(key);
-            return existingValue == _nullInstance ? default(T) : (T) existingValue;
+            if (ReferenceEquals(existingValue, null))
+            {
+                return null;
+            }
+
+            return existingValue == _nullInstance ? new CacheItem<T>(default(T)) : new CacheItem<T>((T) existingValue);
         }
 
+
+        public object LockKey
+        {
+            get {  return Impl;}
+        }
 
         public void Remove(string key)
         {

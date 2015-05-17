@@ -14,18 +14,18 @@ namespace CcAcca.CacheAbstraction
             base.AddOrUpdate(key, new Lazy<T>(() => value), cachePolicy);
         }
 
-        public override T GetData<T>(string key)
+        public override CacheItem<T> GetCacheItem<T>(string key)
         {
-            var data = base.GetData<Lazy<T>>(key);
-            if (data == null) return default(T);
+            CacheItem<Lazy<T>> item = base.GetCacheItem<Lazy<T>>(key);
+            if (item == null) return null;
 
-            return data.Value;
+            return new CacheItem<T>(item.Value.Value);
         }
 
         public T GetOrAdd<T>(string key, Func<string, T> constructor, object cachePolicy = null)
         {
             var wrappedCtor = new Lazy<T>(() => constructor(key));
-            Lazy<T> result = CacheExtensions.GetOrAddImpl(this, key, _ => wrappedCtor, cachePolicy);
+            Lazy<T> result = CacheExtensions.GetOrAddImpl(DecoratedCache, key, _ => wrappedCtor, cachePolicy);
             return result.Value;
         }
     }

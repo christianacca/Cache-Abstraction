@@ -58,14 +58,14 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
 
 
         [Test]
-        public void GetDataShouldRecordReadTime()
+        public void GetCacheItemShouldRecordReadTime()
         {
             // given 
             _cache.AddOrUpdate("key1", new object());
             Thread.Sleep(60);
 
             // when
-            _cache.GetData<object>("key1");
+            _cache.GetCacheItem<object>("key1");
             DateTimeOffset expectedTime = DateTimeOffset.Now;
 
             // then
@@ -77,14 +77,14 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
 
 
         [Test]
-        public void GetDataShouldIncrementAccessCount()
+        public void GetCacheItemShouldIncrementAccessCount()
         {
             // given 
             _cache.AddOrUpdate("key1", new object());
 
             // when
-            _cache.GetData<object>("key1");
-            _cache.GetData<object>("key1");
+            _cache.GetCacheItem<object>("key1");
+            _cache.GetCacheItem<object>("key1");
 
             // then
             CacheItemAccessInfo itemStats =
@@ -99,8 +99,8 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
         {
             // given 
             _cache.AddOrUpdate("key1", new object());
-            _cache.GetData<object>("key1");
-            _cache.GetData<object>("key1");
+            _cache.GetCacheItem<object>("key1");
+            _cache.GetCacheItem<object>("key1");
 
             // when
             _cache.AddOrUpdate("key1", new object());
@@ -117,7 +117,7 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
         {
             // given 
             _cache.AddOrUpdate("key1", new object());
-            _cache.GetData<object>("key1");
+            _cache.GetCacheItem<object>("key1");
 
             // when
             _cache.AddOrUpdate("key1", new object());
@@ -131,10 +131,10 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
 
 
         [Test]
-        public void GetDataShouldSkipRecordingStatsForMissingItems()
+        public void GetCacheItemShouldSkipRecordingStatsForMissingItems()
         {
             // when
-            _cache.GetData<object>("key1");
+            _cache.GetCacheItem<object>("key1");
 
             // then
             var stats =

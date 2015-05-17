@@ -62,10 +62,10 @@ namespace CcAcca.CacheAbstraction
             DecoratedCache.Flush();
         }
 
-
-        public virtual T GetData<T>(string key)
+        
+        public virtual CacheItem<T> GetCacheItem<T>(string key)
         {
-            return DecoratedCache.GetData<T>(key);
+            return DecoratedCache.GetCacheItem<T>(key);
         }
 
 

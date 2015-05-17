@@ -49,10 +49,9 @@ namespace CcAcca.CacheAbstraction
         void Flush();
 
         /// <summary>
-        /// Returns the object in the cache associated with <paramref name="key"/>. If the <paramref name="key"/>
-        /// does not exist, the default value for <typeparamref name="T"/> will be returned.
+        /// Return the item associated with the <paramref name="key"/> supplied or null if not found
         /// </summary>
-        T GetData<T>(string key);
+        CacheItem<T> GetCacheItem<T>(string key);
 
         /// <summary>
         /// Returns an object that this instance will use to lock the cache items during updates

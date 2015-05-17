@@ -2,8 +2,6 @@
 // see LICENSE
 
 using System;
-using System.Collections.Concurrent;
-using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
@@ -48,6 +46,10 @@ namespace CcAcca.CacheAbstraction.Test
         [TearDown]
         public void TestCleanup()
         {
+            if (_cache != null)
+            {
+                _cache.Flush();
+            }
             _cache = null;
         }
 
@@ -96,11 +98,33 @@ namespace CcAcca.CacheAbstraction.Test
 
 
         [Test]
+        public void GetCacheItem_ShouldReturnNullIfItemMissing()
+        {
+            Assert.That(Cache.GetCacheItem<int>("missingkey"), Is.Null);
+        }
+
+
+        [Test]
         public void GetData_ShouldReturnDefaultValueIfItemMissing()
         {
             Assert.That(Cache.GetData<object>("missingkey"), Is.Null);
         }
 
+        
+        [Test]
+        public void GetData_ShouldReturnDefaultValueIfItemMissing_NullableInt()
+        {
+            Assert.That(Cache.GetData<int?>("missingkey"), Is.Null);
+        }
+
+
+        [Test]
+        public void GetData_ShouldReturnDefaultValueIfItemMissing_Int()
+        {
+            Assert.That(Cache.GetData<int>("missingkey"), Is.EqualTo(0));
+        }
+
+        
         [Test]
         public void GetOrAdd_ShouldNotIgnoreAttemptsToAddNullItem()
         {
@@ -114,14 +138,16 @@ namespace CcAcca.CacheAbstraction.Test
         public void GetOrAdd_ShouldReturnExistingCachedItem()
         {
             //given
-            object cachedItem = Cache.GetOrAdd("someKey", _ => new object());
+            var v1 = new TestValue();
+            var v2 = new TestValue();
+
+            Cache.GetOrAdd("someKey", _ => v1);
 
             //when
-            object itemFromCache = Cache.GetOrAdd("someKey", _ => new object());
+            var itemFromCache = Cache.GetOrAdd("someKey", _ => v2);
 
             //then
-            Assert.That(cachedItem, Is.SameAs(itemFromCache), "previously cached item not returned");
-            Assert.That(Cache.Count, Is.EqualTo(1), "cache should not have changed");
+            Assert.That(itemFromCache, Is.EqualTo(v1), "previously cached item not returned");
         }
 
 
@@ -147,30 +173,28 @@ namespace CcAcca.CacheAbstraction.Test
         [Test]
         public void GetOrAdd_WhereItemNotAlreadyCached_ShouldAddItemToCache()
         {
-            Func<string, object> constructor = _ => new object();
-            object cachedItem = Cache.GetOrAdd("someKey", constructor);
+            var v1 = new TestValue();
+            var cachedItem = Cache.GetOrAdd("someKey", _ => v1);
 
             //then
-            Assert.That(Cache.Count, Is.EqualTo(1));
-            Assert.That(cachedItem, Is.Not.Null);
+            Assert.That(cachedItem, Is.EqualTo(v1));
         }
 
 
         [Test]
-        public void GetOrAdd_WhereItemNotAlreadyCached_UnderRaceCondition_ShouldReturnFirstValueAdded()
+        public async Task GetOrAdd_WhereItemNotAlreadyCached_UnderRaceCondition_ShouldReturnFirstValueAdded()
         {
-            Func<string, Task<int>> slowCtor = async _ => {
+            Task<int> t1 = Task.Run(async () => {
                 await Task.Delay(TimeSpan.FromMilliseconds(100));
-                return 1;
-            };
-            Func<string, Task<int>> fastCtor = async _ => {
+                return Cache.GetOrAdd("Key", _ => 1);
+            });
+            Task<int> t2 = Task.Run(async () => {
                 await Task.Delay(TimeSpan.FromMilliseconds(5));
-                return 2;
-            };
-            Task<int> t1 = Task.Run(() => Cache.GetOrAdd("Key", slowCtor));
-            Task<int> t2 = Task.Run(() => Cache.GetOrAdd("Key", fastCtor));
+                return Cache.GetOrAdd("Key", _ => 2);
+            });
             Task<int[]> ts = Task.WhenAll(t1, t2);
-            ts.ContinueWith(task => Assert.That(task.Result, Is.EqualTo(new[] { 2, 2})));
+
+            Assert.That(await ts, Is.EqualTo(new[] {2, 2}));
         }
 
 
@@ -185,15 +209,42 @@ namespace CcAcca.CacheAbstraction.Test
         public void WhenItemExpiresFromCache_GetOrAdd_WillAddNewItemToCache()
         {
             //given
-            object expiredItem = Cache.GetOrAdd("someKey", _ => new object());
+            var v1 = new TestValue();
+            var v2 = new TestValue();
+            var v3 = new TestValue();
+            Cache.GetOrAdd("someKey", _ => v1);
             Cache.Flush(); //simulate item expiring from the cache
 
             //when, then
-            object newItem = Cache.GetOrAdd("someKey", _ => new object());
-            Assert.That(newItem, Is.Not.SameAs(expiredItem), "expired item still in cache");
+            Assert.That(Cache.GetOrAdd("someKey", _ => v2), Is.EqualTo(v2), "expired item was not replaced");
 
-            object newItemInCache = Cache.GetOrAdd("someKey", _ => new object());
-            Assert.That(newItemInCache, Is.SameAs(newItem), "new item was not added to cache");
+            Assert.That(Cache.GetOrAdd("someKey", _ => v3), Is.EqualTo(v2), "v2 still expected");
+        }
+
+        [Serializable]
+        public class TestValue : IEquatable<TestValue>
+        {
+            private readonly Guid _id = Guid.NewGuid();
+
+            public bool Equals(TestValue other)
+            {
+                if (ReferenceEquals(null, other)) return false;
+                if (ReferenceEquals(this, other)) return true;
+                return _id.Equals(other._id);
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                if (ReferenceEquals(this, obj)) return true;
+                if (obj.GetType() != GetType()) return false;
+                return Equals((TestValue)obj);
+            }
+
+            public override int GetHashCode()
+            {
+                return _id.GetHashCode();
+            }
         }
     }
 }

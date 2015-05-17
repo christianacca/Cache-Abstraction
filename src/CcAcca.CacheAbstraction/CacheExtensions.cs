@@ -100,6 +100,18 @@ namespace CcAcca.CacheAbstraction
             return GetCacheChainIterator(cache, true).Where(c => !exclude.Any(type => type.IsInstanceOfType(c)));
         }
 
+
+        /// <summary>
+        /// Returns the value in the cache associated with <paramref name="key"/>. If the <paramref name="key"/>
+        /// does not exist, the default value for <typeparamref name="T"/> will be returned.
+        /// </summary>
+        public static T GetData<T>(this ICache cache, string key)
+        {
+            CacheItem<T> item = cache.GetCacheItem<T>(key);
+            return item != null ? item.Value : default(T);
+        }
+
+
         /// <summary>
         /// Returns the existing object in the cache associated with <paramref name="key"/>. If the 
         /// <paramref name="key"/> does not exist, the <paramref name="constructor"/> delegate will be executed 
@@ -147,9 +159,10 @@ namespace CcAcca.CacheAbstraction
         {
             lock (cache.LockKey)
             {
-                if (cache.Contains(key))
+                CacheItem<T> existingItem = cache.GetCacheItem<T>(key);
+                if (existingItem != null)
                 {
-                    return cache.GetData<T>(key);
+                    return existingItem.Value;
                 }
             }
 
@@ -163,9 +176,10 @@ namespace CcAcca.CacheAbstraction
             T newValue = constructor(key);
             lock (cache.LockKey)
             {
-                if (cache.Contains(key))
+                CacheItem<T> existingItem = cache.GetCacheItem<T>(key);
+                if (existingItem != null)
                 {
-                    return cache.GetData<T>(key);
+                    return existingItem.Value;
                 }
                 cache.AddOrUpdate(key, newValue, cachePolicy);
                 return newValue;

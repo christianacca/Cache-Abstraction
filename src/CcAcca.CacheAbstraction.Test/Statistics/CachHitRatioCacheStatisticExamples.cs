@@ -28,10 +28,10 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
 
 
         [Test]
-        public void GetData_Miss()
+        public void GetCacheItem_Miss()
         {
             // when
-            _cache.GetData<object>("key1");
+            _cache.GetCacheItem<object>("key1");
 
             // then
             var ratio = _cache.Statistics.SafeGetValue<decimal?>(CacheStatisticsKeys.CacheHitRatio);
@@ -40,13 +40,13 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
 
 
         [Test]
-        public void GetData_Hit()
+        public void GetCacheItem_Hit()
         {
             // given
             _cache.AddOrUpdate("key1", new object());
 
             // when
-            _cache.GetData<object>("key1");
+            _cache.GetCacheItem<object>("key1");
 
             // then
             var ratio = _cache.Statistics.SafeGetValue<decimal?>(CacheStatisticsKeys.CacheHitRatio);
@@ -82,13 +82,13 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
 
 
         [Test]
-        public void GetData_MixtureOfHitsAndMisses()
+        public void GetCacheItem_MixtureOfHitsAndMisses()
         {
             // given, when
             _cache.AddOrUpdate("key1", new object());
-            _cache.GetData<object>("key1"); // hit
-            _cache.GetData<object>("key1"); // hit
-            _cache.GetData<object>("key2"); // miss
+            _cache.GetCacheItem<object>("key1"); // hit
+            _cache.GetCacheItem<object>("key1"); // hit
+            _cache.GetCacheItem<object>("key2"); // miss
 
             // then
             var ratio = _cache.Statistics.SafeGetValue<decimal?>(CacheStatisticsKeys.CacheHitRatio);
@@ -112,13 +112,13 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
 
 
         [Test]
-        public void GetData_Contains_MixtureOfHitsAndMisses()
+        public void GetCacheItem_Contains_MixtureOfHitsAndMisses()
         {
             // given, when
             _cache.AddOrUpdate("key1", new object());
-            _cache.GetData<object>("key1"); // hit
-            _cache.GetData<object>("key1"); // hit
-            _cache.GetData<object>("key2"); // miss
+            _cache.GetCacheItem<object>("key1"); // hit
+            _cache.GetCacheItem<object>("key1"); // hit
+            _cache.GetCacheItem<object>("key2"); // miss
             _cache.Contains("key1"); // hit
             _cache.Contains("key1"); // hit
             _cache.Contains("key2"); // miss
@@ -133,8 +133,8 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
         {
             // given
             _cache.AddOrUpdate("key1", new object());
-            _cache.GetData<object>("key1");
-            _cache.GetData<object>("key2");
+            _cache.GetCacheItem<object>("key1");
+            _cache.GetCacheItem<object>("key2");
 
             // when
             _cache.Remove("key1");
@@ -179,11 +179,12 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
             // when
             _cache.GetOrAdd("key1", _ => new object()); // hit
             _cache.GetOrAdd("key1", _ => new object()); // hit
-            _cache.GetOrAdd("key2", _ => new object()); // miss
+            // note: GetOrAdd internally calls GetCacheItem twice if item not already in cache
+            _cache.GetOrAdd("key2", _ => new object()); // miss x2
 
             // then
             var ratio = _cache.Statistics.SafeGetValue<decimal?>(CacheStatisticsKeys.CacheHitRatio);
-            Assert.That(ratio, Is.EqualTo(0.6667m));
+            Assert.That(ratio, Is.EqualTo(0.5m));
         }
 
         [Test]

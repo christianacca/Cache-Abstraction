@@ -30,10 +30,10 @@ namespace CcAcca.CacheAbstraction
             return base.Contains(key);
         }
 
-        public override T GetData<T>(string key)
+        public override CacheItem<T> GetCacheItem<T>(string key)
         {
-            if (IsPaused) return default(T);
-            return base.GetData<T>(key);
+            if (IsPaused) return null;
+            return base.GetCacheItem<T>(key);
         }
 
 

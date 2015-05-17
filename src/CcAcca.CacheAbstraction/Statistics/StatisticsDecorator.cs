@@ -70,11 +70,11 @@ namespace CcAcca.CacheAbstraction.Statistics
         }
 
 
-        public override T GetData<T>(string key)
+        public override CacheItem<T> GetCacheItem<T>(string key)
         {
             _statistics.ItemRetrieved(key);
-            var data = base.GetData<T>(key);
-            if (EqualityComparer<T>.Default.Equals(data, default(T)) && !base.Contains(key))
+            CacheItem<T> item = base.GetCacheItem<T>(key);
+            if (item == null)
             {
                 _statistics.ItemMiss(key);
             }
@@ -82,7 +82,7 @@ namespace CcAcca.CacheAbstraction.Statistics
             {
                 _statistics.ItemHit(key);
             }
-            return data;
+            return item;
         }
 
         public override void Remove(string key)

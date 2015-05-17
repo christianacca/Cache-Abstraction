@@ -46,6 +46,19 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
 
 
         [Test]
+        public void GetCacheItemShouldRecordTime()
+        {
+            //when
+            DateTimeOffset expectedTime = DateTimeOffset.Now;
+            _cache.GetCacheItem<object>("key1");
+
+            //then
+            Thread.Sleep(60);
+            AssertAccessTime(_cache.Statistics, CacheStatisticsKeys.LastUse, expectedTime);
+        }
+
+        
+        [Test]
         public void GetDataShouldRecordTime()
         {
             //when
@@ -114,7 +127,7 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
         {
             //given
             _cache.AddOrUpdate("key1", "whatever");
-            _cache.GetData<object>("key1");
+            _cache.GetCacheItem<object>("key1");
             Thread.Sleep(60);
 
             //when

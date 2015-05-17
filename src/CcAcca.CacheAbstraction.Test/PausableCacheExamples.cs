@@ -122,14 +122,14 @@ namespace CcAcca.CacheAbstraction.Test
 
 
         [Test]
-        public void WhenDisabled_GetData_ShouldNotReturnCachedItems()
+        public void WhenDisabled_GetCacheItem_ShouldNotReturnCachedItems()
         {
             //given
             Cache.GetOrAdd("someKey", _ => new object());
             Cache.IsPaused = false;
 
             //when, then
-            var item = Cache.GetData<object>("somekey");
+            var item = Cache.GetCacheItem<object>("somekey");
             Assert.That(item, Is.Null);
         }
 

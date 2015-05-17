@@ -38,8 +38,23 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CacheManager.Core">
+      <HintPath>..\packages\CacheManager.Core.0.5.0.0\lib\net45\CacheManager.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="CacheManager.Redis">
+      <HintPath>..\packages\CacheManager.StackExchange.Redis.0.5.0.0\lib\net45\CacheManager.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="CacheManager.StackExchange.Redis">
+      <HintPath>..\packages\CacheManager.StackExchange.Redis.0.5.0.0\lib\net45\CacheManager.StackExchange.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="CacheManager.SystemRuntimeCaching">
+      <HintPath>..\packages\CacheManager.SystemRuntimeCaching.0.5.0.0\lib\net45\CacheManager.SystemRuntimeCaching.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis">
+      <HintPath>..\packages\StackExchange.Redis.1.0.414\lib\net45\StackExchange.Redis.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,6 +67,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheAdministatorExamples.cs" />
+    <Compile Include="Redis\RedisSetup.cs" />
+    <Compile Include="Redis\RedisWithMemoryCacheWrapperExamples.cs" />
+    <Compile Include="Redis\RedisWrapperExamples.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CacheDecoratorChainBuilderExamples.cs" />
     <Compile Include="CacheExamplesBase.cs" />
@@ -75,11 +93,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CcAcca.CacheAbstraction.RedisWrapper\CcAcca.CacheAbstraction.Distributed.csproj">
+      <Project>{090E3002-0242-42AA-9850-D7BE0B315F74}</Project>
+      <Name>CcAcca.CacheAbstraction.Distributed</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CcAcca.CacheAbstraction\CcAcca.CacheAbstraction.csproj">
       <Project>{dd710ca1-0a1d-4e11-a7cb-cc2da55355d9}</Project>
       <Name>CcAcca.CacheAbstraction</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

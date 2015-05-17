@@ -86,6 +86,17 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
 
 
         [Test]
+        public void GetCacheItemShouldNotRecordTime()
+        {
+            //when
+            _cache.GetCacheItem<object>("key1");
+
+            //then
+            AssertNoAccessTime(_cache.Statistics, CacheStatisticsKeys.LastWrite);
+        }
+
+        
+        [Test]
         public void GetDataShouldNotRecordTime()
         {
             //when

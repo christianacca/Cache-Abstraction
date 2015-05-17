@@ -29,14 +29,14 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
 
 
         [Test]
-        public void GetDataShouldRecordTime()
+        public void GetCacheItemShouldRecordTime()
         {
             //given
             _cache.AddOrUpdate("key1", "whatever");
 
             //when
             DateTimeOffset expectedTime = DateTimeOffset.Now;
-            _cache.GetData<object>("key1");
+            _cache.GetCacheItem<object>("key1");
 
             //then
             Thread.Sleep(60);
@@ -45,11 +45,11 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
 
 
         [Test]
-        public void WhenItemMissing_GetDataShouldRecordTime()
+        public void WhenItemMissing_GetCacheItemShouldRecordTime()
         {
             //when
             DateTimeOffset expectedTime = DateTimeOffset.Now;
-            _cache.GetData<object>("key1");
+            _cache.GetCacheItem<object>("key1");
 
             //then
             Thread.Sleep(60);
@@ -105,7 +105,7 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
         {
             //given
             _cache.AddOrUpdate("key1", "whatever");
-            _cache.GetData<object>("key1");
+            _cache.GetCacheItem<object>("key1");
 
             //when
             _cache.Flush();
