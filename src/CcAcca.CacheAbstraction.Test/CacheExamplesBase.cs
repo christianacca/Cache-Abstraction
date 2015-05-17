@@ -2,6 +2,9 @@
 // see LICENSE
 
 using System;
+using System.Collections.Concurrent;
+using System.Threading;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace CcAcca.CacheAbstraction.Test
@@ -150,6 +153,24 @@ namespace CcAcca.CacheAbstraction.Test
             //then
             Assert.That(Cache.Count, Is.EqualTo(1));
             Assert.That(cachedItem, Is.Not.Null);
+        }
+
+
+        [Test]
+        public void GetOrAdd_WhereItemNotAlreadyCached_UnderRaceCondition_ShouldReturnFirstValueAdded()
+        {
+            Func<string, Task<int>> slowCtor = async _ => {
+                await Task.Delay(TimeSpan.FromMilliseconds(100));
+                return 1;
+            };
+            Func<string, Task<int>> fastCtor = async _ => {
+                await Task.Delay(TimeSpan.FromMilliseconds(5));
+                return 2;
+            };
+            Task<int> t1 = Task.Run(() => Cache.GetOrAdd("Key", slowCtor));
+            Task<int> t2 = Task.Run(() => Cache.GetOrAdd("Key", fastCtor));
+            Task<int[]> ts = Task.WhenAll(t1, t2);
+            ts.ContinueWith(task => Assert.That(task.Result, Is.EqualTo(new[] { 2, 2})));
         }
 
 
