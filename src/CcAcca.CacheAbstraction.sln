@@ -1,6 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{233E773F-F33B-43A9-89FD-A321C1ED709D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CcAcca.CacheAbstraction", "CcAcca.CacheAbstraction\CcAcca.CacheAbstraction.csproj", "{DD710CA1-0A1D-4E11-A7CB-CC2DA55355D9}"
