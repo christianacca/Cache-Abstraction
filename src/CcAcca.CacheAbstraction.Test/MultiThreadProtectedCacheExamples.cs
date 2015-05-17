@@ -41,9 +41,9 @@ namespace CcAcca.CacheAbstraction.Test
         {
             var cache = new SimpleInmemoryCache();
             int ctorCallCount = 0;
-            Func<string, string> ctor = _ => {
-                ctorCallCount++;
-                return string.Format("Hello World {0}", ctorCallCount);
+            Func<string, int> ctor = _ => {
+                Interlocked.Increment(ref ctorCallCount);
+                return ctorCallCount;
             };
             cache.GetOrAdd("Key", ctor);
             cache.GetOrAdd("Key", ctor);
@@ -56,36 +56,28 @@ namespace CcAcca.CacheAbstraction.Test
         {
             var cache = new SimpleInmemoryCache();
             int ctorCallCount = 0;
-            Func<string, string> ctor = _ => {
+            Func<string, int> ctor = _ => {
                 Interlocked.Increment(ref ctorCallCount);
-                return string.Format("Hello World {0}", ctorCallCount);
+                return ctorCallCount;
             };
-            Func<Task<string>> fn = async () => {
-                await Task.Delay(TimeSpan.FromSeconds(1));
-                return cache.GetOrAdd("Key", ctor);
-            };
-            Task<string> t1 = Task.Run(fn);
-            Task<string> t2 = Task.Run(fn);
-            Task<string[]> ts = Task.WhenAll(new[] {t1, t2});
+            Task<int> t1 = Task.Run(() => cache.GetOrAdd("Key", ctor));
+            Task<int> t2 = Task.Run(() => cache.GetOrAdd("Key", ctor));
+            Task<int[]> ts = Task.WhenAll(t1, t2);
             ts.ContinueWith(task => Assert.That(ctorCallCount, Is.EqualTo(2)));
         }
 
         [Test]
         public void Demo_ConcurrentDictionary_multi_threaded_cache_miss_also_a_problem()
         {
-            var cache = new ConcurrentDictionary<string, string>();
+            var cache = new ConcurrentDictionary<string, int>();
             int ctorCallCount = 0;
-            Func<string, string> ctor = key => {
+            Func<string, int> ctor = _ => {
                 Interlocked.Increment(ref ctorCallCount);
-                return string.Format("Hello World {0}", ctorCallCount);
+                return ctorCallCount;
             };
-            Func<Task<string>> fn = async () => {
-                await Task.Delay(TimeSpan.FromSeconds(1));
-                return cache.GetOrAdd("Key", ctor);
-            };
-            Task<string> t1 = Task.Run(fn);
-            Task<string> t2 = Task.Run(fn);
-            Task<string[]> ts = Task.WhenAll(new[] {t1, t2});
+            Task<int> t1 = Task.Run(() => cache.GetOrAdd("Key", ctor));
+            Task<int> t2 = Task.Run(() => cache.GetOrAdd("Key", ctor));
+            Task<int[]> ts = Task.WhenAll(t1, t2);
             ts.ContinueWith(task => Assert.That(ctorCallCount, Is.EqualTo(2)));
         }
 
@@ -94,17 +86,13 @@ namespace CcAcca.CacheAbstraction.Test
         {
             var cache = new MultiThreadProtectedDecorator(new SimpleInmemoryCache());
             int ctorCallCount = 0;
-            Func<string, string> ctor = _ => {
+            Func<string, int> ctor = _ => {
                 Interlocked.Increment(ref ctorCallCount);
-                return string.Format("Hello World {0}", ctorCallCount);
+                return ctorCallCount;
             };
-            Func<Task<string>> fn = async () => {
-                await Task.Delay(TimeSpan.FromSeconds(1));
-                return cache.GetOrAdd("Key", ctor);
-            };
-            Task<string> t1 = Task.Run(fn);
-            Task<string> t2 = Task.Run(fn);
-            Task<string[]> ts = Task.WhenAll(new[] {t1, t2});
+            Task<int> t1 = Task.Run(() => cache.GetOrAdd("Key", ctor));
+            Task<int> t2 = Task.Run(() => cache.GetOrAdd("Key", ctor));
+            Task<int[]> ts = Task.WhenAll(t1, t2);
             ts.ContinueWith(task => Assert.That(ctorCallCount, Is.EqualTo(1)));
         }
 
@@ -114,17 +102,13 @@ namespace CcAcca.CacheAbstraction.Test
         {
             var cache = new MultiThreadProtectedDecorator(new SimpleInmemoryCache());
             int ctorCallCount = 0;
-            Func<string, string> ctor = _ => {
+            Func<string, int> ctor = _ => {
                 Interlocked.Increment(ref ctorCallCount);
-                return string.Format("Hello World {0}", ctorCallCount);
+                return ctorCallCount;
             };
-            Func<Task<string>> fn = async () => {
-                await Task.Delay(TimeSpan.FromSeconds(1));
-                return CacheExtensions.GetOrAdd(cache, "Key", ctor);
-            };
-            Task<string> t1 = Task.Run(fn);
-            Task<string> t2 = Task.Run(fn);
-            Task<string[]> ts = Task.WhenAll(new[] {t1, t2});
+            Task<int> t1 = Task.Run(() => CacheExtensions.GetOrAdd(cache, "Key", ctor));
+            Task<int> t2 = Task.Run(() => CacheExtensions.GetOrAdd(cache, "Key", ctor));
+            Task<int[]> ts = Task.WhenAll(t1, t2);
             ts.ContinueWith(task => Assert.That(ctorCallCount, Is.EqualTo(1)));
         }
     }
