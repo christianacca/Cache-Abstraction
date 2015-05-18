@@ -20,8 +20,6 @@ namespace CcAcca.CacheAbstraction
 
         public CacheIdentity Id { get; private set; }
 
-        public virtual string InstanceName { get; set; }
-
         public virtual T As<T>() where T : class, ICache
         {
             return null;
