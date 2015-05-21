@@ -57,7 +57,7 @@ namespace CcAcca.CacheAbstraction
 
         public Func<ObjectCache, ObjectCache> FlushImplementation { get; set; }
 
-        public ObjectCache Impl
+        private ObjectCache Impl
         {
             get { return _impl; }
         }

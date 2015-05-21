@@ -19,7 +19,7 @@ namespace CcAcca.CacheAbstraction.Distributed
             Impl = impl;
         }
 
-        public ICacheManager<object> Impl { get; private set; }
+        private ICacheManager<object> Impl { get; set; }
 
         public int Count
         {
