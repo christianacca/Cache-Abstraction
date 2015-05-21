@@ -46,7 +46,7 @@ namespace CcAcca.CacheAbstraction
         }
 
 
-        public virtual int Count
+        public virtual int? Count
         {
             get { return DecoratedCache.Count; }
         }

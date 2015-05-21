@@ -6,7 +6,7 @@ using CcAcca.CacheAbstraction.Statistics;
 namespace CcAcca.CacheAbstraction
 {
     /// <summary>
-    /// Defines the main beahiour of a cache
+    /// Defines the main behaviour of a cache
     /// </summary>
     /// <remarks>
     /// For additional caching functionality that can be added to a cache, see concreate implementations of <see
@@ -23,7 +23,20 @@ namespace CcAcca.CacheAbstraction
         /// <typeparam name="T">The derived <see cref="ICache"/> interface reference requested</typeparam>
         T As<T>() where T : class, ICache;
 
-        int Count { get; }
+
+        /// <summary>
+        /// When supported by the cache implementation, returns the number of items currently in the cache
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// An implemention that does not want to support this property should return null
+        /// </para>
+        /// <para>
+        /// Where one or more <see cref="ICache"/> instances share a backing store this property should
+        /// return only those items added to this instance
+        /// </para>
+        /// </remarks>
+        int? Count { get; }
 
         /// <summary>
         /// Checks the cache for an existing item associated with the value of the <paramref name="key"/> supplied, if no

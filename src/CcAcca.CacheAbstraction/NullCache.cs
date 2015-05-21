@@ -29,7 +29,7 @@ namespace CcAcca.CacheAbstraction
         }
 
 
-        public int Count
+        public int? Count
         {
             get { return 0; }
         }

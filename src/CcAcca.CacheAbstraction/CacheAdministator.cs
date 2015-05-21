@@ -67,7 +67,7 @@ namespace CcAcca.CacheAbstraction
                     InstanceName = cache.Id.InstanceName,
                     IsPaused = pausableCache == null || pausableCache.IsPaused,
                     IsPausable = pausableCache != null,
-                    ItemCount = cache.Count,
+                    ItemCount = cache.Count ?? 0,
                     LastRead = statistics.SafeGetValue<DateTimeOffset?>(CacheStatisticsKeys.LastRead),
                     LastFlush = statistics.SafeGetValue<DateTimeOffset?>(CacheStatisticsKeys.LastFlush),
                     LastUse = statistics.SafeGetValue<DateTimeOffset?>(CacheStatisticsKeys.LastUse),

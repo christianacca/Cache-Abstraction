@@ -132,7 +132,7 @@ namespace CcAcca.CacheAbstraction
         }
 
 
-        public virtual int Count
+        public virtual int? Count
         {
             get { return Impl.Count(x => x.Key.StartsWith(PartionKeyPrefix)); }
         }

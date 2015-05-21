@@ -21,9 +21,9 @@ namespace CcAcca.CacheAbstraction.Distributed
 
         private ICacheManager<object> Impl { get; set; }
 
-        public virtual int Count
+        public virtual int? Count
         {
-            get { return 0; }
+            get { return null; }
         }
 
         public virtual void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
