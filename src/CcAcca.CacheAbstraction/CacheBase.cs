@@ -21,15 +21,30 @@ namespace CcAcca.CacheAbstraction
             PartionKeyPrefix = String.Format("{0}:", Id);
         }
 
+        /// <summary>
+        /// see <see cref="ICache.Id"/>
+        /// </summary>
         public CacheIdentity Id { get; private set; }
 
+
+        /// <summary>
+        /// A qualifying prefix to be added to an item to disambiguate items
+        /// with the same key stored in different logical partitions of the 
+        /// same backing store
+        /// </summary>
         protected string PartionKeyPrefix { get; set; }
 
+        /// <summary>
+        /// see <see cref="ICache.LockKey"/>
+        /// </summary>
         public virtual object LockKey
         {
             get { return _lock; }
         }
 
+        /// <summary>
+        /// see <see cref="ICache.As{T}"/>
+        /// </summary>
         public virtual T As<T>() where T : class, ICache
         {
             return null;
