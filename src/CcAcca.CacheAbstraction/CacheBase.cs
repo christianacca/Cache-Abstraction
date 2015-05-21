@@ -54,7 +54,7 @@ namespace CcAcca.CacheAbstraction
         /// Gets the key qualified by the name of the partition
         /// </summary>
         /// <param name="key">The non-qualified key.</param>
-        protected string GetFullKey(string key)
+        protected virtual string GetFullKey(string key)
         {
             return string.Concat(PartionKeyPrefix, key);
         }

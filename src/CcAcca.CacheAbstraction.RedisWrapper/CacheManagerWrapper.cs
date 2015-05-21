@@ -21,28 +21,28 @@ namespace CcAcca.CacheAbstraction.Distributed
 
         private ICacheManager<object> Impl { get; set; }
 
-        public int Count
+        public virtual int Count
         {
             get { return 0; }
         }
 
-        public void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
+        public virtual void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
         {
             object putValue = ReferenceEquals(null, value) ? (object) _nullInstance : value;
             Impl.Put(key, putValue, Id.ToString());
         }
 
-        public bool Contains(string key)
+        public virtual bool Contains(string key)
         {
             return GetCacheItem<object>(key) != null;
         }
 
-        public void Flush()
+        public virtual void Flush()
         {
             Impl.ClearRegion(Id.ToString());
         }
 
-        public CacheItem<T> GetCacheItem<T>(string key)
+        public virtual CacheItem<T> GetCacheItem<T>(string key)
         {
             var implItem = Impl.GetCacheItem(key, Id.ToString());
             if (implItem == null) return null;
@@ -54,7 +54,7 @@ namespace CcAcca.CacheAbstraction.Distributed
             return new CacheItem<T>((T)implItem.Value);
         }
 
-        public void Remove(string key)
+        public virtual void Remove(string key)
         {
             Impl.Remove(key, Id.ToString());
         }

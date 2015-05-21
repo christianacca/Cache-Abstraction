@@ -52,7 +52,7 @@ namespace CcAcca.CacheAbstraction
 
         #region ICache Members
 
-        public void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
+        public virtual void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
         {
             if (cachePolicy != null)
             {
@@ -66,20 +66,20 @@ namespace CcAcca.CacheAbstraction
         }
 
 
-        public bool Contains(string key)
+        public virtual bool Contains(string key)
         {
             // ReSharper disable once InconsistentlySynchronizedField
             return _inmemoryCache.ContainsKey(GetFullKey(key));
         }
 
 
-        public int Count
+        public virtual int Count
         {
             get { return PartionedKeys.Count(); }
         }
 
 
-        public void Flush()
+        public virtual void Flush()
         {
             lock (LockKey)
             {
@@ -101,7 +101,7 @@ namespace CcAcca.CacheAbstraction
         }
 
 
-        public void Remove(string key)
+        public virtual void Remove(string key)
         {
             string fullKey = GetFullKey(key);
             lock (LockKey)

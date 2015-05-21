@@ -22,7 +22,7 @@ namespace CcAcca.CacheAbstraction
             return new CacheItem<T>(item.Value.Value);
         }
 
-        public T GetOrAdd<T>(string key, Func<string, T> constructor, object cachePolicy = null)
+        public virtual T GetOrAdd<T>(string key, Func<string, T> constructor, object cachePolicy = null)
         {
             var wrappedCtor = new Lazy<T>(() => constructor(key));
             Lazy<T> result = CacheExtensions.GetOrAddImpl(DecoratedCache, key, _ => wrappedCtor, cachePolicy);

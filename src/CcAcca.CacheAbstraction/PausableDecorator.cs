@@ -37,7 +37,7 @@ namespace CcAcca.CacheAbstraction
         }
 
 
-        public bool IsPaused { get; set; }
+        public virtual bool IsPaused { get; set; }
 
 
         public override void Remove(string key)

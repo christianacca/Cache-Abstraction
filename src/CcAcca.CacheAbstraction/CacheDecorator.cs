@@ -69,13 +69,13 @@ namespace CcAcca.CacheAbstraction
         }
 
 
-        public object LockKey
+        public virtual object LockKey
         {
             get { return DecoratedCache.LockKey; }
         }
 
 
-        public ICache StartOfDecoratorChain
+        public virtual ICache StartOfDecoratorChain
         {
             get
             {

@@ -41,7 +41,7 @@ namespace CcAcca.CacheAbstraction
         }
 
 
-        public virtual CacheItem<T> GetCacheItem<T>(string key)
+        public CacheItem<T> GetCacheItem<T>(string key)
         {
             return null;
         }

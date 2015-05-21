@@ -86,7 +86,7 @@ namespace CcAcca.CacheAbstraction
 
         #region Properties
 
-        public Func<string, object, CacheItemPolicy> CacheItemPolicySelector
+        public virtual Func<string, object, CacheItemPolicy> CacheItemPolicySelector
         {
             get { return _cacheItemPolicySelector; }
         }
@@ -104,7 +104,7 @@ namespace CcAcca.CacheAbstraction
 
         #region ICache Members
 
-        public void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
+        public virtual void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
         {
             object putValue;
             CacheItemPolicy itemPolicy;
@@ -126,19 +126,19 @@ namespace CcAcca.CacheAbstraction
         }
 
 
-        public bool Contains(string key)
+        public virtual bool Contains(string key)
         {
             return Impl.Contains(GetFullKey(key));
         }
 
 
-        public int Count
+        public virtual int Count
         {
             get { return Impl.Count(x => x.Key.StartsWith(PartionKeyPrefix)); }
         }
 
 
-        public void Flush()
+        public virtual void Flush()
         {
             lock (LockKey)
             {
@@ -163,7 +163,7 @@ namespace CcAcca.CacheAbstraction
         }
 
 
-        public void Remove(string key)
+        public virtual void Remove(string key)
         {
             lock (LockKey)
             {
