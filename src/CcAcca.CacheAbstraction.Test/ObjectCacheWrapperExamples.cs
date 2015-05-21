@@ -2,6 +2,8 @@
 // see LICENSE
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Caching;
 using System.Threading;
 using NUnit.Framework;
@@ -34,9 +36,9 @@ namespace CcAcca.CacheAbstraction.Test
         {
             // given
             var policy = new CacheItemPolicy
-                {
-                    AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(1)
-                };
+            {
+                AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(1)
+            };
             ICache cache = new ObjectCacheWrapper(cacheItemPolicySelector: (key, value) => policy);
 
             // when, then
@@ -50,6 +52,45 @@ namespace CcAcca.CacheAbstraction.Test
 
             Assert.That(cache.Contains("key1"), Is.False, "GetOrAdd did not use expiry policy");
             Assert.That(cache.Contains("key2"), Is.False, "Add did not use expiry policy");
+        }
+    }
+
+
+    [TestFixture]
+    public class ObjectCacheWrapperPartionedCacheExamples : PartitionedCacheExamplesBase
+    {
+        protected override ICollection<ICache> CreateCachesWithSharedStorage()
+        {
+            var memoryCache = new MemoryCache("MemoryCache");
+            var results = new[]
+            {
+                new ObjectCacheWrapper(memoryCache, "1"),
+                new ObjectCacheWrapper(memoryCache, "2"),
+                new ObjectCacheWrapper(memoryCache, "3")
+            };
+            return results;
+        }
+
+        [Test]
+        public void Count_ShouldOnlyCountItemsInPartition()
+        {
+            // given
+            var cache1 = Caches.ElementAt(0);
+            var cache2 = Caches.ElementAt(1);
+            var cache3 = Caches.ElementAt(2);
+
+            // when
+            cache1.AddOrUpdate("key1", 1);
+
+            cache2.AddOrUpdate("key1", 3);
+            cache2.AddOrUpdate("key2", 4);
+            cache2.AddOrUpdate("key3", 5);
+
+            // then
+            Assert.That(cache1.Count, Is.EqualTo(1));
+            Assert.That(cache2.Count, Is.EqualTo(3));
+            Assert.That(cache3.Count, Is.EqualTo(0));
+            Assert.That(cache3.Contains("key3"), Is.False);
         }
     }
 }

@@ -9,9 +9,6 @@ namespace CcAcca.CacheAbstraction
     /// </summary>
     public class NullCache : CacheBase, INullCache
     {
-        private readonly object _lock = new object();
-
-
         #region Constructors
 
         private NullCache() : base("NullCache") {}
@@ -49,10 +46,6 @@ namespace CcAcca.CacheAbstraction
             return null;
         }
 
-        public object LockKey
-        {
-            get { return _lock; }
-        }
 
         public void Remove(string key)
         {

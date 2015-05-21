@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CcAcca.CacheAbstraction.Statistics;
@@ -52,7 +53,8 @@ namespace CcAcca.CacheAbstraction.Test
         }
 
         [Test]
-        public async Task Demo_SimpleInmemoryCache_two_threads_receiving_cache_misses_will_cause_constructor_to_be_run_twice()
+        public async Task
+            Demo_SimpleInmemoryCache_two_threads_receiving_cache_misses_will_cause_constructor_to_be_run_twice()
         {
             var cache = new SimpleInmemoryCache();
             int ctorCallCount = 0;
@@ -96,24 +98,6 @@ namespace CcAcca.CacheAbstraction.Test
             Assert.That(ctorCallCount, Is.EqualTo(1));
         }
 
-        
-        [Test]
-        public async Task GetOrAdd_when_sharing_dic_protected_from_running_twice_in_multi_threaded_code()
-        {
-            var dic = new ConcurrentDictionary<string, object>();
-            var cache1 = new MultiThreadProtectedDecorator(new SimpleInmemoryCache(dic));
-            var cache2 = new MultiThreadProtectedDecorator(new SimpleInmemoryCache(dic));
-            int ctorCallCount = 0;
-            Func<string, int> ctor = _ => {
-                Interlocked.Increment(ref ctorCallCount);
-                return ctorCallCount;
-            };
-            Task<int> t1 = Task.Run(() => cache1.GetOrAdd("Key", ctor));
-            Task<int> t2 = Task.Run(() => cache2.GetOrAdd("Key", ctor));
-            await Task.WhenAll(t1, t2);
-            Assert.That(ctorCallCount, Is.EqualTo(1));
-        }
-
 
         [Test]
         public async Task GetOrAdd_ExtentionMethod_protected_from_running_twice_in_multi_threaded_code()
@@ -128,6 +112,22 @@ namespace CcAcca.CacheAbstraction.Test
             Task<int> t2 = Task.Run(() => cache.GetOrAdd("Key", ctor));
             await Task.WhenAll(t1, t2);
             Assert.That(ctorCallCount, Is.EqualTo(1));
+        }
+    }
+
+    [TestFixture]
+    public class MultiThreadProtectedPartionedCacheExamples : PartitionedCacheExamplesBase
+    {
+        protected override ICollection<ICache> CreateCachesWithSharedStorage()
+        {
+            var dic = new ConcurrentDictionary<string, object>();
+            var results = new[]
+            {
+                new SimpleInmemoryCache(dic, "Dictionary.1"),
+                new SimpleInmemoryCache(dic, "Dictionary.2"),
+                new SimpleInmemoryCache(dic, "Dictionary.3")
+            };
+            return results.Select(c => new MultiThreadProtectedDecorator(c)).OfType<ICache>().ToList();
         }
     }
 }

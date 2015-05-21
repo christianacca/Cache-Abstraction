@@ -1,6 +1,10 @@
+// Copyright (c) 2014 Christian Crowhurst.  All rights reserved.
+// see LICENSE
+
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using NUnit.Framework;
 
 namespace CcAcca.CacheAbstraction.Test.Redis
@@ -20,15 +24,18 @@ namespace CcAcca.CacheAbstraction.Test.Redis
         public void OneTimeTeardown()
         {
             _process.Kill();
-            _process.WaitForExit();
+            _process.WaitForExit(5000);
             _process.Dispose();
             _process = null;
         }
 
         private static void StartRedis()
         {
+            CleanupOrphanedRedisProcesses();
+
             string toolsDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\tools");
-            string redisExePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\src\packages\Redis-64.2.8.19\redis-server.exe");
+            string redisExePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                @"..\..\..\src\packages\Redis-64.2.8.19\redis-server.exe");
 
             _process = new Process
             {
@@ -45,6 +52,20 @@ namespace CcAcca.CacheAbstraction.Test.Redis
                 }
             };
             _process.Start();
+        }
+
+        private static void CleanupOrphanedRedisProcesses()
+        {
+            var orphanedRedisProcesses = Process.GetProcessesByName("redis-server").OrderBy(p => p.ProcessName).ToList();
+            foreach (var orphan in orphanedRedisProcesses)
+            {
+                orphan.Kill();
+            }
+            if (orphanedRedisProcesses.Any())
+            {
+                Assert.Inconclusive(
+                    "Existing redis-server processes found that had to be killed off. Test run aborted, please try running the Redis test suite again");
+            }
         }
     }
 }

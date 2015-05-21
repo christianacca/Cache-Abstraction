@@ -3,6 +3,8 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CcAcca.CacheAbstraction
 {
@@ -38,6 +40,16 @@ namespace CcAcca.CacheAbstraction
         #endregion
 
 
+        #region Properties
+
+        private IEnumerable<string> PartionedKeys
+        {
+            get { return _inmemoryCache.Keys.Where(k => k.StartsWith(PartionKeyPrefix)); }
+        }
+
+        #endregion
+
+
         #region ICache Members
 
         public void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
@@ -49,7 +61,7 @@ namespace CcAcca.CacheAbstraction
 
             lock (LockKey)
             {
-                _inmemoryCache[key] = value;
+                _inmemoryCache[GetFullKey(key)] = value;
             }
         }
 
@@ -57,13 +69,13 @@ namespace CcAcca.CacheAbstraction
         public bool Contains(string key)
         {
             // ReSharper disable once InconsistentlySynchronizedField
-            return _inmemoryCache.ContainsKey(key);
+            return _inmemoryCache.ContainsKey(GetFullKey(key));
         }
 
 
         public int Count
         {
-            get { return _inmemoryCache.Count; }
+            get { return PartionedKeys.Count(); }
         }
 
 
@@ -71,7 +83,11 @@ namespace CcAcca.CacheAbstraction
         {
             lock (LockKey)
             {
-                _inmemoryCache.Clear();
+                foreach (string key in PartionedKeys)
+                {
+                    object ignored;
+                    _inmemoryCache.TryRemove(key, out ignored);
+                }
             }
         }
 
@@ -80,22 +96,18 @@ namespace CcAcca.CacheAbstraction
         {
             object item;
             // ReSharper disable once InconsistentlySynchronizedField
-            bool found = _inmemoryCache.TryGetValue(key, out item);
+            bool found = _inmemoryCache.TryGetValue(GetFullKey(key), out item);
             return found ? new CacheItem<T>((T) item) : null;
         }
 
 
-        public object LockKey
-        {
-            get { return _inmemoryCache; }
-        }
-
         public void Remove(string key)
         {
+            string fullKey = GetFullKey(key);
             lock (LockKey)
             {
                 object whatever;
-                _inmemoryCache.TryRemove(key, out whatever);
+                _inmemoryCache.TryRemove(fullKey, out whatever);
             }
         }
 

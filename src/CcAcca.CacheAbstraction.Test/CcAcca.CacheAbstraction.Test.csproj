@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheAdministatorExamples.cs" />
+    <Compile Include="PartitionedCacheExamplesBase.cs" />
     <Compile Include="Redis\RedisSetup.cs" />
     <Compile Include="Redis\RedisWithMemoryCacheWrapperExamples.cs" />
     <Compile Include="Redis\RedisWrapperExamples.cs" />
