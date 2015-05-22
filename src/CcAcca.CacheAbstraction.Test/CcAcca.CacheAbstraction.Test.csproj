@@ -94,7 +94,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CcAcca.CacheAbstraction.RedisWrapper\CcAcca.CacheAbstraction.Distributed.csproj">
+    <ProjectReference Include="..\CcAcca.CacheAbstraction.Distributed\CcAcca.CacheAbstraction.Distributed.csproj">
       <Project>{090E3002-0242-42AA-9850-D7BE0B315F74}</Project>
       <Name>CcAcca.CacheAbstraction.Distributed</Name>
     </ProjectReference>

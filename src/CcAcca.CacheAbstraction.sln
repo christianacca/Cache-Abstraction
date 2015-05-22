@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CcAcca.CacheAbstraction.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CcAcca.CacheAbstraction.WebApi", "CcAcca.CacheAbstraction.WebApi\CcAcca.CacheAbstraction.WebApi.csproj", "{B9593361-E7FA-48A8-A45E-E5CB45E71649}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CcAcca.CacheAbstraction.Distributed", "CcAcca.CacheAbstraction.RedisWrapper\CcAcca.CacheAbstraction.Distributed.csproj", "{090E3002-0242-42AA-9850-D7BE0B315F74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CcAcca.CacheAbstraction.Distributed", "CcAcca.CacheAbstraction.Distributed\CcAcca.CacheAbstraction.Distributed.csproj", "{090E3002-0242-42AA-9850-D7BE0B315F74}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9D2F2A44-56AA-4EFA-8E69-AEE66B79D909}"
 	ProjectSection(SolutionItems) = preProject
