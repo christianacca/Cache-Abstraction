@@ -1,0 +1,14 @@
+{
+  "name": "Cache-Abstraction",
+  "version": "0.0.0",
+  "author": "Christian Crowhurst <ghp@christianacca.e4ward.com> (http://codingmonster.co.uk)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/christianacca/Cache-Abstraction"
+  },
+  "main": "",
+  "devDependencies": {
+    "qq": "^0.3.5"
+  }
+}
