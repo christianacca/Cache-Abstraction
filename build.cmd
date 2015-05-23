@@ -17,6 +17,7 @@ REM Test
 packages\NUnit.Runners.2.6.3\tools\nunit-console.exe /config:%config% /framework:net-4.5 ..\bin\%config%\CcAcca.CacheAbstraction.Test\CcAcca.CacheAbstraction.Test.dll
 
 REM Package
-cd ..\nuget
-call CcAcca.CacheAbstraction.cmd
-call CcAcca.CacheAbstraction.WebApi.cmd
+mkdir ..\dist
+%nuget% pack CcAcca.CacheAbstraction\CcAcca.CacheAbstraction.csproj -OutputDirectory ..\dist -Symbols -Prop Configuration=%config%
+%nuget% pack CcAcca.CacheAbstraction.WebApi\CcAcca.CacheAbstraction.WebApi.csproj -OutputDirectory ..\dist -Symbols -Prop Configuration=%config%
+%nuget% pack CcAcca.CacheAbstraction.Distributed\CcAcca.CacheAbstraction.Distributed.csproj -OutputDirectory ..\dist -Symbols -Prop Configuration=%config%
