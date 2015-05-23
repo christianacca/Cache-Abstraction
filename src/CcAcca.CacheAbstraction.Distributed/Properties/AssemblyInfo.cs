@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("CcAcca.CacheAbstraction.Distributed")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("Simple yet extensible cache abstraction for the .net framework. This package adds an adaptor for https://github.com/MichaCo/CacheManager library and thus add support for distributed caches such as Redis, Memcached and Couchbase.")]
+[assembly: AssemblyDescription("Simple yet extensible cache abstraction for the .net framework. This package adds an adaptor for https://github.com/MichaCo/CacheManager library and thus add support for distributed caches such as Redis, Memcached and Couchbase.")]
+[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CcAcca")]
 [assembly: AssemblyProduct("CcAcca.CacheAbstraction.Distributed")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2015")]
