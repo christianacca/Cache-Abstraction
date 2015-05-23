@@ -58,11 +58,18 @@ namespace CcAcca.CacheAbstraction.Test
         {
             var cache = new SimpleInmemoryCache();
             int ctorCallCount = 0;
+            Func<string, int> slowCtor = _ => {
+                // slow down the first ctor call to ensure second thread always see the cache
+                // as empty even though this ctor has been called to add the item
+                Thread.Sleep(TimeSpan.FromMilliseconds(100));
+                Interlocked.Increment(ref ctorCallCount);
+                return ctorCallCount;
+            };
             Func<string, int> ctor = _ => {
                 Interlocked.Increment(ref ctorCallCount);
                 return ctorCallCount;
             };
-            Task<int> t1 = Task.Run(() => cache.GetOrAdd("Key", ctor));
+            Task<int> t1 = Task.Run(() => cache.GetOrAdd("Key", slowCtor));
             Task<int> t2 = Task.Run(() => cache.GetOrAdd("Key", ctor));
             await Task.WhenAll(t1, t2);
             Assert.That(ctorCallCount, Is.EqualTo(2));
@@ -73,11 +80,18 @@ namespace CcAcca.CacheAbstraction.Test
         {
             var cache = new ConcurrentDictionary<string, int>();
             int ctorCallCount = 0;
+            Func<string, int> slowCtor = _ => {
+                // slow down the first ctor call to ensure second thread always see the cache
+                // as empty even though this ctor has been called to add the item
+                Thread.Sleep(TimeSpan.FromMilliseconds(100));
+                Interlocked.Increment(ref ctorCallCount);
+                return ctorCallCount;
+            };
             Func<string, int> ctor = _ => {
                 Interlocked.Increment(ref ctorCallCount);
                 return ctorCallCount;
             };
-            Task<int> t1 = Task.Run(() => cache.GetOrAdd("Key", ctor));
+            Task<int> t1 = Task.Run(() => cache.GetOrAdd("Key", slowCtor));
             Task<int> t2 = Task.Run(() => cache.GetOrAdd("Key", ctor));
             await Task.WhenAll(t1, t2);
             Assert.That(ctorCallCount, Is.EqualTo(2));
@@ -88,11 +102,18 @@ namespace CcAcca.CacheAbstraction.Test
         {
             var cache = new MultiThreadProtectedDecorator(new SimpleInmemoryCache());
             int ctorCallCount = 0;
+            Func<string, int> slowCtor = _ => {
+                // slow down the first ctor call to ensure second thread always see the cache
+                // as empty even though this ctor has been called to add the item
+                Thread.Sleep(TimeSpan.FromMilliseconds(100));
+                Interlocked.Increment(ref ctorCallCount);
+                return ctorCallCount;
+            };
             Func<string, int> ctor = _ => {
                 Interlocked.Increment(ref ctorCallCount);
                 return ctorCallCount;
             };
-            Task<int> t1 = Task.Run(() => cache.GetOrAdd("Key", ctor));
+            Task<int> t1 = Task.Run(() => cache.GetOrAdd("Key", slowCtor));
             Task<int> t2 = Task.Run(() => cache.GetOrAdd("Key", ctor));
             await Task.WhenAll(t1, t2);
             Assert.That(ctorCallCount, Is.EqualTo(1));
