@@ -39,22 +39,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CacheManager.Core">
-      <HintPath>..\packages\CacheManager.Core.0.5.0.0\lib\net45\CacheManager.Core.dll</HintPath>
+      <HintPath>..\..\packages\CacheManager.Core.0.5.0.0\lib\net45\CacheManager.Core.dll</HintPath>
     </Reference>
     <Reference Include="CacheManager.Redis">
-      <HintPath>..\packages\CacheManager.StackExchange.Redis.0.5.0.0\lib\net45\CacheManager.Redis.dll</HintPath>
+      <HintPath>..\..\packages\CacheManager.StackExchange.Redis.0.5.0.0\lib\net45\CacheManager.Redis.dll</HintPath>
     </Reference>
     <Reference Include="CacheManager.StackExchange.Redis">
-      <HintPath>..\packages\CacheManager.StackExchange.Redis.0.5.0.0\lib\net45\CacheManager.StackExchange.Redis.dll</HintPath>
+      <HintPath>..\..\packages\CacheManager.StackExchange.Redis.0.5.0.0\lib\net45\CacheManager.StackExchange.Redis.dll</HintPath>
     </Reference>
     <Reference Include="CacheManager.SystemRuntimeCaching">
-      <HintPath>..\packages\CacheManager.SystemRuntimeCaching.0.5.0.0\lib\net45\CacheManager.SystemRuntimeCaching.dll</HintPath>
+      <HintPath>..\..\packages\CacheManager.SystemRuntimeCaching.0.5.0.0\lib\net45\CacheManager.SystemRuntimeCaching.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="StackExchange.Redis">
-      <HintPath>..\packages\StackExchange.Redis.1.0.414\lib\net45\StackExchange.Redis.dll</HintPath>
+      <HintPath>..\..\packages\StackExchange.Redis.1.0.414\lib\net45\StackExchange.Redis.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
