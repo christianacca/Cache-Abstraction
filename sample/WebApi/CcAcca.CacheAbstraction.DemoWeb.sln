@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{233E773F-F33B-43A9-89FD-A321C1ED709D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CcAcca.CacheAbstraction.DemoWeb", "CcAcca.CacheAbstraction.DemoWeb\CcAcca.CacheAbstraction.DemoWeb.csproj", "{22207B89-6866-4C7C-92E9-5DAFAC45236A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CcAcca.CacheAbstraction", "..\..\src\CcAcca.CacheAbstraction\CcAcca.CacheAbstraction.csproj", "{DD710CA1-0A1D-4E11-A7CB-CC2DA55355D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CcAcca.CacheAbstraction.WebApi", "..\..\src\CcAcca.CacheAbstraction.WebApi\CcAcca.CacheAbstraction.WebApi.csproj", "{B9593361-E7FA-48A8-A45E-E5CB45E71649}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9D2F2A44-56AA-4EFA-8E69-AEE66B79D909}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		DebugLocal|Any CPU = DebugLocal|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DD710CA1-0A1D-4E11-A7CB-CC2DA55355D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD710CA1-0A1D-4E11-A7CB-CC2DA55355D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD710CA1-0A1D-4E11-A7CB-CC2DA55355D9}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD710CA1-0A1D-4E11-A7CB-CC2DA55355D9}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{DD710CA1-0A1D-4E11-A7CB-CC2DA55355D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD710CA1-0A1D-4E11-A7CB-CC2DA55355D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9593361-E7FA-48A8-A45E-E5CB45E71649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9593361-E7FA-48A8-A45E-E5CB45E71649}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9593361-E7FA-48A8-A45E-E5CB45E71649}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9593361-E7FA-48A8-A45E-E5CB45E71649}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{B9593361-E7FA-48A8-A45E-E5CB45E71649}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9593361-E7FA-48A8-A45E-E5CB45E71649}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22207B89-6866-4C7C-92E9-5DAFAC45236A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22207B89-6866-4C7C-92E9-5DAFAC45236A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22207B89-6866-4C7C-92E9-5DAFAC45236A}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{22207B89-6866-4C7C-92E9-5DAFAC45236A}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{22207B89-6866-4C7C-92E9-5DAFAC45236A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22207B89-6866-4C7C-92E9-5DAFAC45236A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+EndGlobal
