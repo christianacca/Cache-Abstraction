@@ -1,3 +1,20 @@
+<a name="2.1.0"></a>
+# 2.1.0 (2015-05-25)
+
+
+## Bug Fixes
+
+- **NullCache:** As<T> should return a reference to self
+  ([065750a2](https://github.com/christianacca/Cache-Abstraction/commit/065750a26b80d5639af8962274fe3277773d9401))
+
+
+## Features
+
+- **GlobalCacheProvider:** add DefaultInstance static property to return a well known instance
+  ([ecf9ae93](https://github.com/christianacca/Cache-Abstraction/commit/ecf9ae9378c86ce2fda953ff34fe172aae13f90f))
+
+
+
 <a name="2.0.0"></a>
 # 2.0.0 (2015-05-23)
 
