@@ -47,7 +47,8 @@ namespace CcAcca.CacheAbstraction
         /// </summary>
         public virtual T As<T>() where T : class, ICache
         {
-            return null;
+            var self = this as T;
+            return self;
         }
 
         /// <summary>

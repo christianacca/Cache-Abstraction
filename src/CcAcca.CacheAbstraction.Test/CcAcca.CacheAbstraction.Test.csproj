@@ -78,6 +78,7 @@
     <Compile Include="MultiThreadProtectedCacheExamples.cs" />
     <Compile Include="ObjectCacheWrapperExamples.cs" />
     <Compile Include="PausableCacheExamples.cs" />
+    <Compile Include="NullCacheExamples.cs" />
     <Compile Include="SimpleInmemoryCacheExamples.cs" />
     <Compile Include="StatisticsCacheExamles.cs" />
     <Compile Include="Statistics\CacheStatisticExamplesBase.cs" />
