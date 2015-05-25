@@ -7,7 +7,7 @@ if "%config%" == "" (
 cd src
 
 REM Package restore
-call %nuget% restore CcAcca.CacheAbstraction.sln -OutputDirectory %cd%\packages -NonInteractive
+call %nuget% restore CcAcca.CacheAbstraction.sln -OutputDirectory %cd%\..\packages -NonInteractive
 
 REM Build
 %WINDIR%\Microsoft.NET\Framework\v4.0.30319\msbuild CcAcca.CacheAbstraction.sln /p:Configuration="%config%" /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
