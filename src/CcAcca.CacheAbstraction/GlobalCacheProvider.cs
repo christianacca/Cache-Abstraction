@@ -12,7 +12,8 @@ namespace CcAcca.CacheAbstraction
     /// will be registered with any <see cref="CacheAdministator"/> that this provider has been configured with
     /// </summary>
     /// <remarks>
-    /// By default, providers will use the default cache constructors
+    /// By default, instances of this class will use the default cache constructors that have previously been
+    /// registered using <see cref="RegisterDefaultConstructor{T}"/>
     /// </remarks>
     public class GlobalCacheProvider : ICacheProvider
     {
@@ -23,7 +24,7 @@ namespace CcAcca.CacheAbstraction
 
         public GlobalCacheProvider()
         {
-            _cacheConstructors = new ConcurrentDictionary<Type, Func<CacheIdentity, ICache>>(DefaultConstructors);
+            _cacheConstructors = new ConcurrentDictionary<Type, Func<CacheIdentity, ICache>>(_defaultConstructors);
         }
 
         public virtual CacheAdministator CacheAdministator { get; set; }
@@ -32,7 +33,6 @@ namespace CcAcca.CacheAbstraction
         {
             get { return new ConcurrentDictionary<Type, Func<CacheIdentity, ICache>>(_cacheConstructors); }
         }
-
 
         public virtual void ClearConstructors()
         {
@@ -99,18 +99,53 @@ namespace CcAcca.CacheAbstraction
             _cacheConstructors.TryRemove(typeof (T), out ignored);
         }
 
-        private static readonly ConcurrentDictionary<Type, Func<CacheIdentity, ICache>> DefaultConstructors;
+        private static ConcurrentDictionary<Type, Func<CacheIdentity, ICache>> _defaultConstructors;
+        private static Lazy<GlobalCacheProvider> _defaultInstance;
 
         static GlobalCacheProvider()
         {
-            DefaultConstructors = new ConcurrentDictionary<Type, Func<CacheIdentity, ICache>>();
-            RegisterDefaultConstructor<ICache>(
+            ResetDefaultConstructors();
+            // defer creating the actual instance so as that default cache constructors can be registered
+            // at the start of the executing application
+            _defaultInstance = new Lazy<GlobalCacheProvider>(() => new GlobalCacheProvider { CacheAdministator = CacheAdministator.DefaultInstance });
+        }
+
+        public static ConcurrentDictionary<Type, Func<CacheIdentity, ICache>> CreateDefaultCacheCtors()
+        {
+            var ctors = new ConcurrentDictionary<Type, Func<CacheIdentity, ICache>>();
+
+            DoRegisterDefaultConstructor<ICache>(ctors,
                 cacheId => new ConcurrentDictionary<string, object>()
-                               .WrapCache(CacheCreationOptions.DefaultsWith(cacheId)));
-            RegisterDefaultConstructor<ObjectCache>(
+                    .WrapCache(CacheCreationOptions.DefaultsWith(cacheId)));
+            DoRegisterDefaultConstructor<ObjectCache>(ctors,
                 cacheId => new MemoryCache(cacheId.Name).WrapCache(CacheCreationOptions.DefaultsWith(cacheId)));
-            RegisterDefaultConstructor<MemoryCache>(
+            DoRegisterDefaultConstructor<MemoryCache>(ctors,
                 cacheId => new MemoryCache(cacheId.Name).WrapCache(CacheCreationOptions.DefaultsWith(cacheId)));
+
+            return ctors;
+        }
+
+        /// <summary>
+        /// A default, globally available, instance of a <see cref="GlobalCacheProvider"/> for use within an
+        /// application
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Any caches created by this default instance will be:
+        /// <list type="bullet">
+        /// <item>registered with the default instance of the <see cref="CacheAdministator"/></item>
+        /// <item>created using the default cache constructors registered at the start of the executing application</item>
+        /// </list>
+        /// </para>
+        /// <para>
+        /// To override the above behaviour, an application should assign it's own instance to this static property
+        /// </para>
+        /// </remarks>
+        /// <seealso cref="RegisterDefaultConstructor{T}"/>
+        public static GlobalCacheProvider DefaultInstance
+        {
+            get { return _defaultInstance.Value; }
+            set { _defaultInstance = new Lazy<GlobalCacheProvider>(() => value); }
         }
 
         /// <summary>
@@ -118,7 +153,7 @@ namespace CcAcca.CacheAbstraction
         /// </summary>
         public static void ClearDefaultConstructors()
         {
-            DefaultConstructors.Clear();
+            _defaultConstructors = new ConcurrentDictionary<Type, Func<CacheIdentity, ICache>>();
         }
 
         /// <summary>
@@ -130,7 +165,23 @@ namespace CcAcca.CacheAbstraction
         /// </remarks>
         public static void RegisterDefaultConstructor<T>(Func<CacheIdentity, ICache> ctor) where T : class
         {
-            DefaultConstructors[typeof (T)] = ctor;
+            DoRegisterDefaultConstructor<T>(_defaultConstructors, ctor);
+        }
+
+        /// <summary>
+        /// see <see cref="RegisterDefaultConstructor{T}"/>
+        /// </summary>
+        private static void DoRegisterDefaultConstructor<T>(ConcurrentDictionary<Type, Func<CacheIdentity, ICache>> ctors, Func<CacheIdentity, ICache> ctor) where T : class
+        {
+            ctors[typeof (T)] = ctor;
+        }
+
+        /// <summary>
+        /// Resets the list of default cache constructors to "factory defaults"
+        /// </summary>
+        public static void ResetDefaultConstructors()
+        {
+            _defaultConstructors = CreateDefaultCacheCtors();
         }
     }
 }

@@ -25,6 +25,7 @@ namespace CcAcca.CacheAbstraction.Test
         {
             // reset any defaults thay may have been tampered with during a test
             CacheDecoratorOptions.Default = _originalDecoratorDefaults;
+            GlobalCacheProvider.ResetDefaultConstructors();
         }
 
 
@@ -99,6 +100,35 @@ namespace CcAcca.CacheAbstraction.Test
 
             // then
             Assert.That(cacheProvider.CacheAdministator.AllCaches.Count(), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void DefaultInstance_ShouldRegisterCacheWithDefaultCacheAdministrator()
+        {
+            // when
+            ICache cache = GlobalCacheProvider.DefaultInstance.Get<ICache>("SomeCacheName");
+
+            // then
+            Assert.That(CacheAdministator.DefaultInstance.Contains(cache), Is.True);
+        }
+
+        
+        [Test]
+        public void DefaultInstance_WhenFirstCalled_ShouldBeConfiguredWithRegisteredDefaultCacheConstructors()
+        {
+            // given
+            var cacheProvider = GlobalCacheProvider.DefaultInstance;
+
+            // when
+            // overwrite the default cache contructor for ICache 
+            // - this will be ignored by cacheProvider as it was registered after cacheProvider
+            //   was created
+            GlobalCacheProvider.RegisterDefaultConstructor<ICache>(id => NullCache.Instance);
+
+            ICache cache = cacheProvider.Get<ICache>("MyNewCache");
+
+            // then
+            Assert.That(cache.As<INullCache>() == null, Is.True);
         }
     }
 }
