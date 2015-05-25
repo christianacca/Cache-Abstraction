@@ -35,7 +35,7 @@ namespace CcAcca.CacheAbstraction.Test.Redis
 
             string toolsDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\tools");
             string redisExePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                @"..\..\..\src\packages\Redis-64.2.8.19\redis-server.exe");
+                @"..\..\..\packages\Redis-64.2.8.19\redis-server.exe");
 
             _process = new Process
             {
