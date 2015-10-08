@@ -37,10 +37,12 @@
     <DocumentationFile>..\..\bin\Release\CcAcca.CacheAbstraction.Distributed\CcAcca.CacheAbstraction.Distributed.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CacheManager.Core">
-      <HintPath>..\..\packages\CacheManager.Core.0.5.0.0\lib\net45\CacheManager.Core.dll</HintPath>
+    <Reference Include="CacheManager.Core, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\CacheManager.Core.0.6.0\lib\net45\CacheManager.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -53,13 +55,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CcAcca.CacheAbstraction\CcAcca.CacheAbstraction.csproj">
       <Project>{dd710ca1-0a1d-4e11-a7cb-cc2da55355d9}</Project>
       <Name>CcAcca.CacheAbstraction</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
