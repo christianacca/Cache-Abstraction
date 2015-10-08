@@ -38,25 +38,27 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CacheManager.Core">
-      <HintPath>..\..\packages\CacheManager.Core.0.5.0.0\lib\net45\CacheManager.Core.dll</HintPath>
+    <Reference Include="CacheManager.Core, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\CacheManager.Core.0.6.0\lib\net45\CacheManager.Core.dll</HintPath>
     </Reference>
-    <Reference Include="CacheManager.Redis">
-      <HintPath>..\..\packages\CacheManager.StackExchange.Redis.0.5.0.0\lib\net45\CacheManager.Redis.dll</HintPath>
+    <Reference Include="CacheManager.StackExchange.Redis, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\CacheManager.StackExchange.Redis.0.6.0\lib\net45\CacheManager.StackExchange.Redis.dll</HintPath>
     </Reference>
-    <Reference Include="CacheManager.StackExchange.Redis">
-      <HintPath>..\..\packages\CacheManager.StackExchange.Redis.0.5.0.0\lib\net45\CacheManager.StackExchange.Redis.dll</HintPath>
-    </Reference>
-    <Reference Include="CacheManager.SystemRuntimeCaching">
-      <HintPath>..\..\packages\CacheManager.SystemRuntimeCaching.0.5.0.0\lib\net45\CacheManager.SystemRuntimeCaching.dll</HintPath>
+    <Reference Include="CacheManager.SystemRuntimeCaching, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\CacheManager.SystemRuntimeCaching.0.6.0\lib\net45\CacheManager.SystemRuntimeCaching.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="StackExchange.Redis">
-      <HintPath>..\..\packages\StackExchange.Redis.1.0.414\lib\net45\StackExchange.Redis.dll</HintPath>
+    <Reference Include="StackExchange.Redis, Version=1.0.316.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\StackExchange.Redis.1.0.481\lib\net45\StackExchange.Redis.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml.Linq" />
