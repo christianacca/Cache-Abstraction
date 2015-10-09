@@ -106,25 +106,43 @@ namespace CcAcca.CacheAbstraction
 
         public virtual void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
         {
-            object putValue;
-            CacheItemPolicy itemPolicy;
-            if (ReferenceEquals(null, value))
-            {
-                putValue = _nullInstance;
-                itemPolicy = GetItemPolicy(key, _nullInstance, (CacheItemPolicy) cachePolicy);
-            }
-            else
-            {
-                putValue = value;
-                itemPolicy = GetItemPolicy(key, value, (CacheItemPolicy)cachePolicy);
-            }
-
+            Tuple<object, CacheItemPolicy> itemValueAndPolicy = GetItemValueAndPolicy(key, value, cachePolicy);
             lock (LockKey)
             {
-                Impl.Set(GetFullKey(key), putValue, itemPolicy);
+                Impl.Set(GetFullKey(key), itemValueAndPolicy.Item1, itemValueAndPolicy.Item2);
             }
         }
 
+        /// <remarks>
+        /// <para>
+        /// WARNING: this implementation of <see cref="ICache.AddOrUpdate{T}(string,T,System.Func{string,T,T},object)"/> 
+        /// will lock the cache whilst <paramref name="updateFactory"/> runs.
+        /// This will be terrible for scalability if <paramref name="updateFactory"/> is not fast as requests for items 
+        /// to this cache will have to wait.
+        /// </para>
+        /// <para>
+        /// Instead consider using <see cref="SimpleInmemoryCache"/> or other implementations of <see cref="ICache"/>
+        /// that does not suffer from the same locking problem
+        /// </para>
+        /// </remarks>
+        public virtual void AddOrUpdate<T>(string key, T addValue, Func<string, T, T> updateFactory, object cachePolicy = null)
+        {
+            Tuple<object, CacheItemPolicy> addValueAndPolicy = GetItemValueAndPolicy(key, addValue, cachePolicy);
+            lock (LockKey)
+            {
+                string fullItemKey = GetFullKey(key);
+                var newItem = new CacheItem(fullItemKey, addValueAndPolicy.Item1);
+                CacheItem existingItem = Impl.AddOrGetExisting(newItem, addValueAndPolicy.Item2);
+                if (existingItem.Value != null)
+                {
+                    object rawExistingValue = existingItem.Value;
+                    T updateValue = updateFactory(key, (T)(Equals(rawExistingValue, _nullInstance) ? null : rawExistingValue));
+                    Tuple<object, CacheItemPolicy> updateValueAndPolicy = GetItemValueAndPolicy(key, updateValue, cachePolicy);
+                    CacheItem updateItem = new CacheItem(fullItemKey, updateValueAndPolicy.Item1);
+                    Impl.Set(updateItem, updateValueAndPolicy.Item2);
+                }
+            }
+        }
 
         public virtual bool Contains(string key)
         {
@@ -193,6 +211,22 @@ namespace CcAcca.CacheAbstraction
         private static string CreateUniqueCacheName()
         {
             return string.Format("ObjectCacheWrapper-{0}", Guid.NewGuid());
+        }
+
+        private Tuple<object, CacheItemPolicy> GetItemValueAndPolicy<T>(string key, T value, object cachePolicy)
+        {
+            Tuple<object, CacheItemPolicy> itemValueAndPolicy;
+            if (ReferenceEquals(null, value))
+            {
+                itemValueAndPolicy = new Tuple<object, CacheItemPolicy>(_nullInstance,
+                    this.GetItemPolicy(key, _nullInstance, (CacheItemPolicy)cachePolicy));
+            }
+            else
+            {
+                itemValueAndPolicy = new Tuple<object, CacheItemPolicy>(value,
+                    this.GetItemPolicy(key, value, (CacheItemPolicy)cachePolicy));
+            }
+            return itemValueAndPolicy;
         }
     }
 }

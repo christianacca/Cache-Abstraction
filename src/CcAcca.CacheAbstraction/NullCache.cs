@@ -3,6 +3,8 @@
 
 namespace CcAcca.CacheAbstraction
 {
+    using System;
+
     /// <summary>
     /// Never actually caches items! Useful when you have a consumer expects to be handed an <see cref="ICache"/>
     /// instance but the context dictates that caching should not actually occur
@@ -21,6 +23,11 @@ namespace CcAcca.CacheAbstraction
         public void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
         {
             //no-op
+        }
+
+        public void AddOrUpdate<T>(string key, T addValue, Func<string, T, T> updateFactory, object cachePolicy = null)
+        {
+            // no-op
         }
 
         public bool Contains(string key)

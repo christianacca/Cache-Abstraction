@@ -3,6 +3,8 @@
 
 namespace CcAcca.CacheAbstraction
 {
+    using System;
+
     /// <summary>
     /// Base class for creating concreate decorator classes that will add (decorate) additional caching
     /// behaviours to implementations of <see cref="ICache"/>
@@ -31,6 +33,11 @@ namespace CcAcca.CacheAbstraction
         public virtual void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
         {
             DecoratedCache.AddOrUpdate(key, value, cachePolicy);
+        }
+
+        public virtual void AddOrUpdate<T>(string key, T addValue, Func<string, T, T> updateFactory, object cachePolicy = null)
+        {
+            DecoratedCache.AddOrUpdate(key, addValue, updateFactory, cachePolicy);
         }
 
         public virtual T As<T>() where T : class, ICache

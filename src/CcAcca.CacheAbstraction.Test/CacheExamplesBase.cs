@@ -7,6 +7,8 @@ using NUnit.Framework;
 
 namespace CcAcca.CacheAbstraction.Test
 {
+    using System.ComponentModel;
+
     /// <summary>
     /// Defines and asserts the detailed behaviour / contract that a <see cref="ICache"/> implementation is
     /// expected to implement
@@ -79,9 +81,36 @@ namespace CcAcca.CacheAbstraction.Test
         public void AddOrUpdate_ShouldUpdateExistingItem_NullValueSupplied()
         {
             Cache.AddOrUpdate("key", 5);
-            Cache.AddOrUpdate<object>("key", null);
+            Cache.AddOrUpdate<int?>("key", null);
 
-            Assert.That(Cache.GetData<object>("key"), Is.Null);
+            Assert.That(Cache.GetData<int?>("key"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdate_ShouldUpdateExistingItem_NullIntSupplied()
+        {
+            Cache.AddOrUpdate("key", 5);
+            Cache.AddOrUpdate<int?>("key", null);
+
+            Assert.That(Cache.GetData<int?>("key"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdate_ShouldUpdateExistingItem_NullDateTimeSupplied()
+        {
+            Cache.AddOrUpdate("key", 5);
+            Cache.AddOrUpdate<DateTime?>("key", null);
+
+            Assert.That(Cache.GetData<DateTime?>("key"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdate_ShouldUpdateExistingItem_NullGuidSupplied()
+        {
+            Cache.AddOrUpdate("key", 5);
+            Cache.AddOrUpdate<Guid?>("key", null);
+
+            Assert.That(Cache.GetData<Guid?>("key"), Is.Null);
         }
 
 
@@ -91,6 +120,203 @@ namespace CcAcca.CacheAbstraction.Test
             Cache.AddOrUpdate<object>("whatever", null);
 
             Assert.That(Cache.Contains("whatever"), Is.True);
+        }
+
+        [Test]
+        public void AddOrUpdate_ShouldNotIgnoreAttemptsToAddNullCustomObject()
+        {
+            Cache.AddOrUpdate<TestValue>("whatever", null);
+
+            Assert.That(Cache.Contains("whatever"), Is.True);
+        }
+
+        [Test]
+        public void AddOrUpdate_ShouldNotIgnoreAttemptsToAddNullInt()
+        {
+            Cache.AddOrUpdate<int?>("whatever", null);
+
+            Assert.That(Cache.Contains("whatever"), Is.True);
+        }
+
+        [Test]
+        public void AddOrUpdate_ShouldNotIgnoreAttemptsToAddNullDateTime()
+        {
+            Cache.AddOrUpdate<DateTime?>("whatever", null);
+
+            Assert.That(Cache.Contains("whatever"), Is.True);
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_Should_Add()
+        {
+            Cache.AddOrUpdate("key", 5, (key, existingValue) => existingValue + 1);
+
+            Assert.That(Cache.Contains("key"), Is.True);
+        }
+
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldUpdateExistingItem()
+        {
+            Cache.AddOrUpdate("key", 5);
+            Cache.AddOrUpdate("key", 5, (key, existingValue) => existingValue + 1);
+
+            Assert.That(Cache.GetData<int>("key"), Is.EqualTo(6));
+        }
+
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldUpdateExistingItem_NullStringSupplied()
+        {
+            Cache.AddOrUpdate("key", "crap");
+            Cache.AddOrUpdate("key", "crap 2", (key, existingValue) => null);
+
+            Assert.That(Cache.GetData<string>("key"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldUpdateExistingItem_NullInt16Supplied()
+        {
+            Cache.AddOrUpdate<short?>("key", 10);
+            Cache.AddOrUpdate<short?>("key", 11, (key, existingValue) => null);
+
+            Assert.That(Cache.GetData<short?>("key"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldUpdateExistingItem_NullIntSupplied()
+        {
+            Cache.AddOrUpdate("key", 10);
+            Cache.AddOrUpdate<int?>("key", 11, (key, existingValue) => null);
+
+            Assert.That(Cache.GetData<int?>("key"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldUpdateExistingItem_NullInt64Supplied()
+        {
+            Cache.AddOrUpdate<long?>("key", 10);
+            Cache.AddOrUpdate<long?>("key", 11, (key, existingValue) => null);
+
+            Assert.That(Cache.GetData<long?>("key"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldUpdateExistingItem_NullFloatSupplied()
+        {
+            Cache.AddOrUpdate<float?>("key", 10F);
+            Cache.AddOrUpdate<float?>("key", 11F, (key, existingValue) => null);
+
+            Assert.That(Cache.GetData<float?>("key"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldUpdateExistingItem_NullDoubleSupplied()
+        {
+            Cache.AddOrUpdate<double?>("key", 10D);
+            Cache.AddOrUpdate<double?>("key", 11D, (key, existingValue) => null);
+
+            Assert.That(Cache.GetData<double?>("key"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldUpdateExistingItem_NullDecimalSupplied()
+        {
+            Cache.AddOrUpdate<decimal?>("key", 10m);
+            Cache.AddOrUpdate<decimal?>("key", 11m, (key, existingValue) => null);
+
+            Assert.That(Cache.GetData<decimal?>("key"), Is.Null);
+        }
+
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldUpdateExistingItem_NullGuidSupplied()
+        {
+            Cache.AddOrUpdate("key", Guid.NewGuid());
+            Cache.AddOrUpdate<Guid?>("key", Guid.NewGuid(), (key, existingValue) => null);
+
+            Assert.That(Cache.GetData<Guid?>("key"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldUpdateExistingItem_NullByteArraySupplied()
+        {
+            Cache.AddOrUpdate("key", new Byte[0]);
+            Cache.AddOrUpdate("key", new Byte[0], (key, existingValue) => null);
+
+            Assert.That(Cache.GetData<Byte[]>("key"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldUpdateExistingItem_NullDateTimeSupplied()
+        {
+            Cache.AddOrUpdate("key", DateTime.Now);
+            Cache.AddOrUpdate<DateTime?>("key", DateTime.Now, (key, existingValue) => null);
+
+            Assert.That(Cache.GetData<DateTime?>("key"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldUpdateExistingItem_NullDateTimeOffsetSupplied()
+        {
+            Cache.AddOrUpdate("key", DateTimeOffset.Now);
+            Cache.AddOrUpdate<DateTimeOffset?>("key", DateTimeOffset.Now, (key, existingValue) => null);
+
+            Assert.That(Cache.GetData<DateTimeOffset?>("key"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldUpdateExistingItem_NullCustomObjectSupplied()
+        {
+            Cache.AddOrUpdate("key", new TestValue());
+            Cache.AddOrUpdate("key", new TestValue(), (key, existingValue) => null);
+
+            Assert.That(Cache.GetData<TestValue>("key"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldNotIgnoreAttemptsToAddNullItem()
+        {
+            Cache.AddOrUpdate<int?>("whatever", null, (key, existingValue) => 1);
+
+            Assert.That(Cache.Contains("whatever"), Is.True);
+            Assert.That(Cache.GetData<int?>("whatever"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldNotIgnoreAttemptsToAddNullCustomValue()
+        {
+            Cache.AddOrUpdate<TestValue>("whatever", null, (key, existingValue) => new TestValue());
+
+            Assert.That(Cache.Contains("whatever"), Is.True);
+            Assert.That(Cache.GetData<TestValue>("whatever"), Is.Null);
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldNotIgnoreAttemptsToUpdateNullInt()
+        {
+            // given
+            Cache.AddOrUpdate<int?>("whatever", null, (key, existingValue) => 10);
+
+            // when
+            Cache.AddOrUpdate<int?>("whatever", null, (key, existingValue) => 11);
+
+            Assert.That(Cache.Contains("whatever"), Is.True);
+            Assert.That(Cache.GetData<int?>("whatever"), Is.EqualTo(11));
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldNotIgnoreAttemptsToUpdateNullCustomValue()
+        {
+            // given
+            Cache.AddOrUpdate<TestValue>("whatever", null, (key, existingValue) => new TestValue());
+
+            // when
+            var update = new TestValue();
+            Cache.AddOrUpdate<TestValue>("whatever", null, (key, existingValue) => update);
+
+            Assert.That(Cache.Contains("whatever"), Is.True);
+            Assert.That(Cache.GetData<TestValue>("whatever"), Is.EqualTo(update));
         }
 
 
@@ -129,6 +355,14 @@ namespace CcAcca.CacheAbstraction.Test
         public void GetOrAdd_ShouldNotIgnoreAttemptsToAddNullItem()
         {
             Cache.GetOrAdd<object>("whatever", _ => null);
+
+            Assert.That(Cache.Contains("whatever"), Is.True);
+        }
+
+        [Test]
+        public void GetOrAdd_ShouldNotIgnoreAttemptsToAddNullCustomObject()
+        {
+            Cache.GetOrAdd<TestValue>("whatever", _ => null);
 
             Assert.That(Cache.Contains("whatever"), Is.True);
         }

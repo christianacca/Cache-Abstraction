@@ -3,6 +3,8 @@
 
 namespace CcAcca.CacheAbstraction
 {
+    using System;
+
     /// <summary>
     /// Extends a <see cref="ICache"/> with the ability to be paused and resumed
     /// </summary>
@@ -21,6 +23,12 @@ namespace CcAcca.CacheAbstraction
         {
             if (IsPaused) return;
             base.AddOrUpdate(key, value, cachePolicy);
+        }
+
+        public override void AddOrUpdate<T>(string key, T addValue, Func<string, T, T> updateFactory, object cachePolicy = null)
+        {
+            if (IsPaused) return;
+            base.AddOrUpdate(key, addValue, updateFactory, cachePolicy);
         }
 
 

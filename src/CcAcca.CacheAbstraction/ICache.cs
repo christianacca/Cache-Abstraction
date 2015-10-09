@@ -5,13 +5,21 @@ using CcAcca.CacheAbstraction.Statistics;
 
 namespace CcAcca.CacheAbstraction
 {
+    using System;
+
     /// <summary>
     /// Defines the main behaviour of a cache
     /// </summary>
     /// <remarks>
+    /// <para>
     /// For additional caching functionality that can be added to a cache, see concreate implementations of <see
     /// cref="CacheDecorator"/> such as
     /// <see cref="StatisticsDecorator"/>
+    /// </para>
+    /// <para>
+    /// This interface has been kept lean. For additionaly API see the extension methods
+    /// that target this interface.
+    /// </para>
     /// </remarks>
     /// <seealso cref="CacheExtensions"/>
     public interface ICache
@@ -45,14 +53,29 @@ namespace CcAcca.CacheAbstraction
         /// <param name="key">The key to associate with the <paramref name="value"/></param>
         /// <param name="value">The value to add to the cache</param>
         /// <param name="cachePolicy">
-        /// Optional cache policy that controls behaviour such as when the value returned <paramref name="value"/>
-        /// will be aged out of the cache
+        /// Optional cache policy that controls behaviour such as when the item will be aged out of the cache
         /// </param>
         /// <remarks>
         /// The cache may already be associated with a cache policy. In this case, any <paramref name="cachePolicy"/>
         /// parameter supplied will override the cache policy defined for the cache
         /// </remarks>
         void AddOrUpdate<T>(string key, T value, object cachePolicy = null);
+
+        /// <summary>
+        /// Adds a key/value pair to the <see cref="ICache"/> if the key does not already exist, 
+        /// or to update a key/value pair in the <see cref="ICache"/> by using the specified function if the key already exists.
+        /// </summary>
+        /// <param name="key">The key to be added or whose value is to be updated</param>
+        /// <param name="addValue">The value to be added for an absent key</param>
+        /// <param name="updateFactory">The function used to generate a new value for an existing key based on the key's existing value</param>
+        /// <param name="cachePolicy">
+        /// Optional cache policy that controls behaviour such as when the item will be aged out of the cache
+        /// </param>
+        /// <remarks>
+        /// The cache may already be associated with a cache policy. In this case, any <paramref name="cachePolicy"/>
+        /// parameter supplied will override the cache policy defined for the cache
+        /// </remarks>
+        void AddOrUpdate<T>(string key, T addValue, Func<string, T, T> updateFactory, object cachePolicy = null);
 
         bool Contains(string key);
 

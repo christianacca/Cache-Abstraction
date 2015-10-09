@@ -65,6 +65,19 @@ namespace CcAcca.CacheAbstraction
             }
         }
 
+        public virtual void AddOrUpdate<T>(string key, T addValue, Func<string, T, T> updateFactory, object cachePolicy = null)
+        {
+            if (cachePolicy != null)
+            {
+                throw new NotSupportedException("CachePolicy paramater not support by this ICache implementation");
+            }
+
+            lock (LockKey)
+            {
+                _inmemoryCache.AddOrUpdate(GetFullKey(key), addValue, (k, existingValue) => updateFactory(key, (T)existingValue));
+            }
+        }
+
 
         public virtual bool Contains(string key)
         {
