@@ -114,6 +114,41 @@ namespace CcAcca.CacheAbstraction
         }
 
 
+        /// <remarks>
+        /// <para>
+        /// WARNING: this implementation of <see cref="ICache.AddOrUpdate{T}(string,T,System.Func{string,T,T},object)"/> 
+        /// will lock the cache whilst <paramref name="updateValueFactory"/> runs.
+        /// This will be terrible for scalability if <paramref name="updateValueFactory"/> is not fast as requests for items 
+        /// to this cache will have to wait.
+        /// </para>
+        /// <para>
+        /// Instead consider using <see cref="SimpleInmemoryCache"/> or other implementations of <see cref="ICache"/>
+        /// that does not suffer from the same locking problem
+        /// </para>
+        /// </remarks>
+        public virtual void AddOrUpdate<T>(string key, T addValue, Func<string, T, T> updateValueFactory, object cachePolicy = null)
+        {
+            if (addValue == null)
+            {
+                throw new ArgumentNullException("addValue");
+            }
+            if (updateValueFactory == null)
+            {
+                throw new ArgumentNullException("updateValueFactory");
+            }
+
+            string fullItemKey = GetFullKey(key);
+            lock (this.LockKey)
+            {
+                object existingValue = Impl.AddOrGetExisting(fullItemKey, addValue, GetItemPolicy(key, addValue, (CacheItemPolicy)cachePolicy));
+                if (existingValue != null)
+                {
+                    T updateValue = updateValueFactory(key, (T)existingValue);
+                    Impl.Set(fullItemKey, updateValue, GetItemPolicy(key, updateValue, (CacheItemPolicy)cachePolicy));
+                }
+            }
+        }
+
         public virtual bool Contains(string key)
         {
             return Impl.Contains(GetFullKey(key));

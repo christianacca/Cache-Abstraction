@@ -8,6 +8,8 @@ using System.Linq;
 
 namespace CcAcca.CacheAbstraction
 {
+    using System.CodeDom;
+
     /// <summary>
     /// A cache for those situations where all you need is an inmemory cache and you are happy to control when
     /// items are expired by explicitly calling <see cref="Flush"/>
@@ -69,6 +71,26 @@ namespace CcAcca.CacheAbstraction
             }
         }
 
+        public virtual void AddOrUpdate<T>(string key, T addValue, Func<string, T, T> updateValueFactory, object cachePolicy = null)
+        {
+            if (addValue == null)
+            {
+                throw new ArgumentNullException("addValue");
+            }
+            if (updateValueFactory == null)
+            {
+                throw new ArgumentNullException("updateValueFactory");
+            }
+            if (cachePolicy != null)
+            {
+                throw new NotSupportedException("CachePolicy paramater not support by this ICache implementation");
+            }
+
+            lock (LockKey)
+            {
+                _inmemoryCache.AddOrUpdate(GetFullKey(key), addValue, (k, existingValue) => AssertIsNotNull(updateValueFactory(key, (T)existingValue)));
+            }
+        }
 
         public virtual bool Contains(string key)
         {
@@ -116,6 +138,15 @@ namespace CcAcca.CacheAbstraction
         }
 
         #endregion
+
+        private static T AssertIsNotNull<T>(T value)
+        {
+            if (!ReferenceEquals(value, null))
+            {
+                return value;
+            }
+            throw new ArgumentNullException("value");
+        }
 
 
         private static string CreateUniqueCacheName()

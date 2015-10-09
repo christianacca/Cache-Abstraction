@@ -4,6 +4,7 @@
 using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
+// ReSharper disable ExpressionIsAlwaysNull
 
 namespace CcAcca.CacheAbstraction.Test
 {
@@ -61,6 +62,7 @@ namespace CcAcca.CacheAbstraction.Test
         {
             Cache.AddOrUpdate("key", 5);
 
+            Assert.That(Cache.GetData<int>("key"), Is.EqualTo(5));
             Assert.That(Cache.Contains("key"), Is.True);
         }
 
@@ -87,6 +89,45 @@ namespace CcAcca.CacheAbstraction.Test
         public void AddOrUpdate_AddShouldThrowWhenNullSupplied()
         {
             Assert.Throws<ArgumentNullException>(() => { Cache.AddOrUpdate<object>("whatever", null); });
+        }
+
+        [Test]
+        public void AddOrUpdateFactory_UpdateShouldThrowWhenNullValueSupplied()
+        {
+            // given
+            Cache.AddOrUpdate("key", 5);
+
+            // when, then
+            Assert.Throws<ArgumentNullException>(() => { this.Cache.AddOrUpdate<int?>("key", 5, (k, v) => null); });
+        }
+
+
+        
+        [Test]
+        public void AddOrUpdateFactory_AddShouldThrowWhenNullSupplied()
+        {
+            int? value = null;
+            Assert.Throws<ArgumentNullException>(() => { Cache.AddOrUpdate("whatever", value, (k, v) => 5); });
+        }
+
+
+        [Test]
+        public void AddOrUpdateFactory_Should_Add()
+        {
+            Cache.AddOrUpdate("key", 5, (k, existingValue) => existingValue + 1);
+
+            Assert.That(Cache.GetData<int>("key"), Is.EqualTo(5));
+            Assert.That(Cache.Contains("key"), Is.True);
+        }
+
+
+        [Test]
+        public void AddOrUpdateFactory_ShouldUpdateExistingItem()
+        {
+            Cache.AddOrUpdate("key", 5);
+            Cache.AddOrUpdate("key", 5, (key, existingValue) => existingValue + 1);
+
+            Assert.That(Cache.GetData<int>("key"), Is.EqualTo(6));
         }
 
 

@@ -112,6 +112,26 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
             Assert.That(itemStats.ReadCount, Is.EqualTo(0));
         }
 
+        
+        [Test]
+        public void AddOrUpdateFactoryShouldResetAccessCount()
+        {
+            // given 
+            _cache.AddOrUpdate("key1", new object());
+            _cache.GetCacheItem<object>("key1");
+            _cache.GetCacheItem<object>("key1");
+
+            // when
+            _cache.AddOrUpdate("key1", new object(), (k, v) => new object());
+
+            // then
+            CacheItemAccessInfo itemStats =
+                _cache.Statistics.SafeGetValue<IDictionary<string, CacheItemAccessInfo>>(CacheStatisticsKeys.ItemAccess)
+                    ["key1"];
+            Assert.That(itemStats.ReadCount, Is.EqualTo(0));
+        }
+
+
         [Test]
         public void AddOrUpdateShouldResetLastRead()
         {
@@ -121,6 +141,24 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
 
             // when
             _cache.AddOrUpdate("key1", new object());
+
+            // then
+            CacheItemAccessInfo itemStats =
+                _cache.Statistics.SafeGetValue<IDictionary<string, CacheItemAccessInfo>>(CacheStatisticsKeys.ItemAccess)
+                    ["key1"];
+            Assert.That(itemStats.LastRead, Is.Null);
+        }
+
+        
+        [Test]
+        public void AddOrUpdateFactoryShouldResetLastRead()
+        {
+            // given 
+            _cache.AddOrUpdate("key1", new object());
+            _cache.GetCacheItem<object>("key1");
+
+            // when
+            _cache.AddOrUpdate("key1", new object(), (k, v) => new object());
 
             // then
             CacheItemAccessInfo itemStats =

@@ -46,6 +46,12 @@ namespace CcAcca.CacheAbstraction.Statistics
             base.AddOrUpdate(key, value, cachePolicy);
         }
 
+        public override void AddOrUpdate<T>(string key, T addValue, Func<string, T, T> updateValueFactory, object cachePolicy = null)
+        {
+            _statistics.ItemAddOrUpdated(key);
+            base.AddOrUpdate(key, addValue, updateValueFactory, cachePolicy);
+        }
+
 
         public override bool Contains(string key)
         {

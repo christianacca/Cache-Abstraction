@@ -122,6 +122,20 @@ namespace CcAcca.CacheAbstraction.Test
 
 
         [Test]
+        public void WhenPaused_AddOrUpdateFactoryShouldDoNothing()
+        {
+            //given
+            Cache.IsPaused = true;
+
+            //when
+            Cache.AddOrUpdate("someKey", new object(), (k, v) => new object());
+
+            //then
+            Assert.That(Cache.Contains("someKey"), Is.False);
+        }
+
+
+        [Test]
         public void WhenDisabled_GetCacheItem_ShouldNotReturnCachedItems()
         {
             //given

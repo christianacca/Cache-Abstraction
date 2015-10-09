@@ -44,6 +44,19 @@ namespace CcAcca.CacheAbstraction.Test.Statistics
             AssertAccessTime(_cache.Statistics, CacheStatisticsKeys.LastUse, expectedTime);
         }
 
+        
+        [Test]
+        public void AddOrUpdateFactoryShouldRecordTime()
+        {
+            //when
+            DateTimeOffset expectedTime = DateTimeOffset.Now;
+            _cache.AddOrUpdate("key1", new object(), (k, v) => new object());
+
+            //then
+            Thread.Sleep(60);
+            AssertAccessTime(_cache.Statistics, CacheStatisticsKeys.LastUse, expectedTime);
+        }
+
 
         [Test]
         public void GetCacheItemShouldRecordTime()

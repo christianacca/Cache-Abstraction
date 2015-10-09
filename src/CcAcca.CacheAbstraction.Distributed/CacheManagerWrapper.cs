@@ -5,6 +5,8 @@ using CacheManager.Core;
 
 namespace CcAcca.CacheAbstraction.Distributed
 {
+    using System;
+
     /// <summary>
     /// Adapts the ICacheManager from the https://github.com/MichaCo/CacheManager library to match
     /// <see cref="ICache"/>
@@ -28,7 +30,15 @@ namespace CcAcca.CacheAbstraction.Distributed
 
         public virtual void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
         {
-            this.Impl.Put(key, value, this.Id.ToString());
+            Impl.Put(key, value, Id.ToString());
+        }
+
+        public void AddOrUpdate<T>(string key, T addValue, Func<string, T, T> updateValueFactory, object cachePolicy = null)
+        {
+            Impl.AddOrUpdate(key, 
+                Id.ToString(), 
+                addValue, 
+                existingValue => AssertIsNotNull(updateValueFactory(key, (T)existingValue)));
         }
 
         public virtual bool Contains(string key)
@@ -53,5 +63,15 @@ namespace CcAcca.CacheAbstraction.Distributed
         {
             Impl.Remove(key, Id.ToString());
         }
+
+        private static T AssertIsNotNull<T>(T value)
+        {
+            if (!ReferenceEquals(value, null))
+            {
+                return value;
+            }
+            throw new ArgumentNullException("value");
+        }
+
     }
 }

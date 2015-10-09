@@ -1,6 +1,8 @@
 // Copyright (c) 2014 Christian Crowhurst.  All rights reserved.
 // see LICENSE
 
+using System;
+
 namespace CcAcca.CacheAbstraction
 {
     /// <summary>
@@ -23,6 +25,11 @@ namespace CcAcca.CacheAbstraction
             base.AddOrUpdate(key, value, cachePolicy);
         }
 
+        public override void AddOrUpdate<T>(string key, T addValue, Func<string, T, T> updateValueFactory, object cachePolicy = null)
+        {
+            if (IsPaused) return;
+            base.AddOrUpdate(key, addValue, updateValueFactory, cachePolicy);
+        }
 
         public override bool Contains(string key)
         {

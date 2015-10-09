@@ -1,6 +1,8 @@
 // Copyright (c) 2014 Christian Crowhurst.  All rights reserved.
 // see LICENSE
 
+using System;
+
 namespace CcAcca.CacheAbstraction
 {
     /// <summary>
@@ -31,6 +33,11 @@ namespace CcAcca.CacheAbstraction
         public virtual void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
         {
             DecoratedCache.AddOrUpdate(key, value, cachePolicy);
+        }
+
+        public virtual void AddOrUpdate<T>(string key, T addValue, Func<string, T, T> updateValueFactory, object cachePolicy = null)
+        {
+            DecoratedCache.AddOrUpdate(key, addValue, updateValueFactory, cachePolicy);
         }
 
         public virtual T As<T>() where T : class, ICache

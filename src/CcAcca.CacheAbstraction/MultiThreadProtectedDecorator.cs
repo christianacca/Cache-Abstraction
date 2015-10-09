@@ -5,6 +5,9 @@ using System;
 
 namespace CcAcca.CacheAbstraction
 {
+    /// <summary>
+    /// See <see cref="IMultiThreadProtectedCache"/>
+    /// </summary>
     public class MultiThreadProtectedDecorator : CacheDecorator, IMultiThreadProtectedCache
     {
         public MultiThreadProtectedDecorator(ICache decoratedCache) : base(decoratedCache) {}
@@ -15,20 +18,35 @@ namespace CcAcca.CacheAbstraction
             {
                 throw new ArgumentNullException("value");
             }
-            base.AddOrUpdate(key, new Lazy<T>(() => value), cachePolicy);
+            base.AddOrUpdate(key, new Lazy<object>(() => value), cachePolicy);
+        }
+
+        public override void AddOrUpdate<T>(string key, T addValue, Func<string, T, T> updateValueFactory, object cachePolicy = null)
+        {
+            base.AddOrUpdate<object>(key,
+                addValue,
+                (k, v) => {
+                    var lazyValue = v as Lazy<object>;
+                    return updateValueFactory(k, (T)(lazyValue == null ? v : lazyValue.Value));
+                }, 
+                cachePolicy);
         }
 
         public override CacheItem<T> GetCacheItem<T>(string key)
         {
-            CacheItem<Lazy<T>> item = base.GetCacheItem<Lazy<T>>(key);
-            if (item == null) return null;
+            var rawItem = base.GetCacheItem<object>(key);
+            if (rawItem == null)
+            {
+                return null;
+            }
 
-            return new CacheItem<T>(item.Value.Value);
+            var lazyValue = rawItem.Value as Lazy<object>;
+            return lazyValue == null ? new CacheItem<T>((T)rawItem.Value) : new CacheItem<T>((T)lazyValue.Value);
         }
 
         public virtual T GetOrAdd<T>(string key, Func<string, T> constructor, object cachePolicy = null)
         {
-            var wrappedCtor = new Lazy<T>(() => {
+            var wrappedCtor = new Lazy<object>(() => {
                 var value = constructor(key);
                 if (value == null)
                 {
@@ -37,8 +55,9 @@ namespace CcAcca.CacheAbstraction
                 }
                 return value;
             });
-            Lazy<T> result = CacheExtensions.GetOrAddImpl(DecoratedCache, key, _ => wrappedCtor, cachePolicy);
-            return result.Value;
+            var rawValue = CacheExtensions.GetOrAddImpl<object>(DecoratedCache, key, _ => wrappedCtor, cachePolicy);
+            var lazyValue = rawValue as Lazy<object>;
+            return (T)(lazyValue == null ? rawValue : lazyValue.Value);
         }
     }
 }
