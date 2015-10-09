@@ -106,22 +106,10 @@ namespace CcAcca.CacheAbstraction
 
         public virtual void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
         {
-            object putValue;
-            CacheItemPolicy itemPolicy;
-            if (ReferenceEquals(null, value))
-            {
-                putValue = _nullInstance;
-                itemPolicy = GetItemPolicy(key, _nullInstance, (CacheItemPolicy) cachePolicy);
-            }
-            else
-            {
-                putValue = value;
-                itemPolicy = GetItemPolicy(key, value, (CacheItemPolicy)cachePolicy);
-            }
-
+            CacheItemPolicy itemPolicy = GetItemPolicy(key, value, (CacheItemPolicy)cachePolicy);
             lock (LockKey)
             {
-                Impl.Set(GetFullKey(key), putValue, itemPolicy);
+                Impl.Set(GetFullKey(key), value, itemPolicy);
             }
         }
 
@@ -159,7 +147,7 @@ namespace CcAcca.CacheAbstraction
                 return null;
             }
 
-            return existingValue == _nullInstance ? new CacheItem<T>(default(T)) : new CacheItem<T>((T) existingValue);
+            return new CacheItem<T>((T)existingValue);
         }
 
 
@@ -175,7 +163,6 @@ namespace CcAcca.CacheAbstraction
 
 
         private static Func<string, object, CacheItemPolicy> _defaultCachePolicySelector;
-        private static readonly object _nullInstance = new object();
 
         /// <summary>
         /// By default never expire items

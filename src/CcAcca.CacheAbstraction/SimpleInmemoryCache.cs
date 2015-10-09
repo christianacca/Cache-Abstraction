@@ -54,6 +54,10 @@ namespace CcAcca.CacheAbstraction
 
         public virtual void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
         {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
             if (cachePolicy != null)
             {
                 throw new NotSupportedException("CachePolicy paramater not support by this ICache implementation");

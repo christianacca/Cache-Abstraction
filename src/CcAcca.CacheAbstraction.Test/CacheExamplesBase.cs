@@ -76,21 +76,17 @@ namespace CcAcca.CacheAbstraction.Test
 
 
         [Test]
-        public void AddOrUpdate_ShouldUpdateExistingItem_NullValueSupplied()
+        public void AddOrUpdate_UpdateShouldThrowWhenNullValueSupplied()
         {
             Cache.AddOrUpdate("key", 5);
-            Cache.AddOrUpdate<object>("key", null);
-
-            Assert.That(Cache.GetData<object>("key"), Is.Null);
+            Assert.Throws<ArgumentNullException>(() => { Cache.AddOrUpdate<object>("key", null); });
         }
 
 
         [Test]
-        public void AddOrUpdate_ShouldNotIgnoreAttemptsToAddNullItem()
+        public void AddOrUpdate_AddShouldThrowWhenNullSupplied()
         {
-            Cache.AddOrUpdate<object>("whatever", null);
-
-            Assert.That(Cache.Contains("whatever"), Is.True);
+            Assert.Throws<ArgumentNullException>(() => { Cache.AddOrUpdate<object>("whatever", null); });
         }
 
 
@@ -126,11 +122,9 @@ namespace CcAcca.CacheAbstraction.Test
 
         
         [Test]
-        public void GetOrAdd_ShouldNotIgnoreAttemptsToAddNullItem()
+        public void GetOrAdd_ShouldThrowWhenNullAdded()
         {
-            Cache.GetOrAdd<object>("whatever", _ => null);
-
-            Assert.That(Cache.Contains("whatever"), Is.True);
+            Assert.Throws<ArgumentNullException>(() => { Cache.GetOrAdd<object>("whatever", _ => null); });
         }
 
 

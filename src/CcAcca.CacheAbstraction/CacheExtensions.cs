@@ -135,6 +135,7 @@ namespace CcAcca.CacheAbstraction
         /// <paramref name="cache"/>.
         /// </para>
         /// </remarks>
+        /// <exception cref="ArgumentNullException">When the <paramref name="constructor"/> delegate returns a null value</exception>
         public static T GetOrAdd<T>(this ICache cache, string key, Func<string, T> constructor,
                                     object cachePolicy = null)
         {

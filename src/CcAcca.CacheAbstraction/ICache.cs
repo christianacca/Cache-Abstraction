@@ -1,6 +1,7 @@
 // Copyright (c) 2014 Christian Crowhurst.  All rights reserved.
 // see LICENSE
 
+using System;
 using CcAcca.CacheAbstraction.Statistics;
 
 namespace CcAcca.CacheAbstraction
@@ -52,6 +53,7 @@ namespace CcAcca.CacheAbstraction
         /// The cache may already be associated with a cache policy. In this case, any <paramref name="cachePolicy"/>
         /// parameter supplied will override the cache policy defined for the cache
         /// </remarks>
+        /// <exception cref="ArgumentNullException">When <paramref name="value"/> is null</exception>
         void AddOrUpdate<T>(string key, T value, object cachePolicy = null);
 
         bool Contains(string key);

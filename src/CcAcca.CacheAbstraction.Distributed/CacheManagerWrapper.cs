@@ -28,8 +28,7 @@ namespace CcAcca.CacheAbstraction.Distributed
 
         public virtual void AddOrUpdate<T>(string key, T value, object cachePolicy = null)
         {
-            object putValue = ReferenceEquals(null, value) ? (object) _nullInstance : value;
-            Impl.Put(key, putValue, Id.ToString());
+            this.Impl.Put(key, value, this.Id.ToString());
         }
 
         public virtual bool Contains(string key)
@@ -46,10 +45,6 @@ namespace CcAcca.CacheAbstraction.Distributed
         {
             var implItem = Impl.GetCacheItem(key, Id.ToString());
             if (implItem == null) return null;
-            if (Equals(_nullInstance, implItem.Value))
-            {
-                return new CacheItem<T>(default(T));
-            }
 
             return new CacheItem<T>((T)implItem.Value);
         }
@@ -58,7 +53,5 @@ namespace CcAcca.CacheAbstraction.Distributed
         {
             Impl.Remove(key, Id.ToString());
         }
-
-        private static readonly string _nullInstance = "{1C0017F4-01E3-4FB5-B1F6-4004D28F08B8}";
     }
 }
