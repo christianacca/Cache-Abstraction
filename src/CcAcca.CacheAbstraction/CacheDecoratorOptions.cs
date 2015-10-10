@@ -59,7 +59,7 @@ namespace CcAcca.CacheAbstraction
         {
             _defaultInstance = new CacheDecoratorOptions
                 {
-                    IsMultiThreadProtectionOn = true,
+                    IsMultiThreadProtectionOn = false,
                     IsPausableOn = true,
                     IsStatisticsOn = false
                 };

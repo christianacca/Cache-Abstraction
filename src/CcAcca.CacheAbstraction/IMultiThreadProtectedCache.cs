@@ -6,13 +6,22 @@ using System;
 namespace CcAcca.CacheAbstraction
 {
     /// <summary>
-    /// Extends a <see cref="ICache"/> with a robust multi-thread safe implementation of 
-    /// <see cref="CacheExtensions.GetOrAdd{T}"/> functionality
+    /// Extends a <see cref="ICache"/> <see cref="CacheExtensions.GetOrAdd{T}"/> with an implementation
+    /// that is guaranteed to not execute the value producing function twice when two threads receive a
+    /// cache miss at the same time.
     /// </summary>
     /// <remarks>
-    /// Unlike <see cref="CacheExtensions.GetOrAdd{T}"/> extension method, this implementation will not execute the 
-    /// constructor function (a delegate of type  <see cref="Func{TResult}"/>) twice when two threads receive a cache miss 
-    /// at the same time. This might be critical when the calling the constructor function is costly
+    /// <para>
+    /// The default implementation (<see cref="MultiThreadProtectedDecorator"/>) will NOT use locking 
+    /// to synchronize access to the cache and therefore will be highly scalable.
+    /// </para>
+    /// <para>
+    /// However, by not maintaining a lock there is the risk that an exception raised by the value producing function 
+    /// will be thrown on another thread. This will happen when a second thread reads the key about to be added precisely
+    /// after the first thread has confirmed that the key does not exist, but before it has run the function
+    /// that produces the value to be added. The second thread will end up running the value producing function
+    /// and will receive any exception raised.
+    /// </para>
     /// </remarks>
     public interface IMultiThreadProtectedCache : ICache
     {

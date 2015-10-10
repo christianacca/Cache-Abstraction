@@ -60,7 +60,7 @@ namespace CcAcca.CacheAbstraction.Test
             ICache cache = _builder.AddDecorators(_cacheImpl, CacheDecoratorOptions.Default);
             Assert.That(cache.As<IPausableCache>(), Is.Not.Null);
             Assert.That(cache.As<IStatisticsCache>(), Is.Null);
-            Assert.That(cache.As<IMultiThreadProtectedCache>(), Is.Not.Null);
+            Assert.That(cache.As<IMultiThreadProtectedCache>(), Is.Null);
         }
 
         [Test]
