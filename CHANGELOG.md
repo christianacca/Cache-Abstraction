@@ -1,10 +1,44 @@
+<a name="3.0.0"></a>
+# 3.0.0 (2015-10-10)
+
+
+## Features
+
+- **ICache:** new overload to AddOrUpdate that accepts update delegate
+  ([720311af](https://github.com/christianacca/Cache-Abstraction/commit/720311af9c578f2eee63fb3feca7fb74535ef81c))
+
+
+## Breaking Changes
+
+- **CacheDecoratorOptions:** due to [2e70c22f](https://github.com/christianacca/Cache-Abstraction/commit/2e70c22f4453c89d17501ecb7e9cd3416a76d4b1),
+  caches no longer decorated by `MultiThreadProtectedDecorator` by default
+
+To make this decorator apply by default you will need to set `CacheDecoratorOptions.Default` at the start of your application. Eg:
+
+```csharp
+CacheDecoratorOptions.Default = new CacheDecoratorOptions
+{
+    IsMultiThreadProtectionOn = true,
+    IsPausableOn = true
+};
+```
+
+- **ICache:** due to [8b61518e](https://github.com/christianacca/Cache-Abstraction/commit/8b61518e332e3c88decd236d9bc56da81d4c76fd),
+  remove null support
+
+This is in preparation to adding a new overload to AddOrUpdate.
+
+This new AddOrUpdate overload will not work with CacheManager
+library in conjunction with null support
+
+
 <a name="2.1.0"></a>
 # 2.1.0 (2015-05-25)
 
 
 ## Bug Fixes
 
-- **NullCache:** As<T> should return a reference to self
+- **NullCache:** `As<T>` should return a reference to self
   ([065750a2](https://github.com/christianacca/Cache-Abstraction/commit/065750a26b80d5639af8962274fe3277773d9401))
 
 
